@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Lucid.HTMX.Attributes where
+module Lucid.HTMX.Base where
 
 import Lucid.Base (Attribute, makeAttribute)
 import Data.Text (Text)
