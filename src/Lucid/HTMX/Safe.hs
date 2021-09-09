@@ -1,3 +1,4 @@
+{-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Lucid.HTMX.Safe where
@@ -47,7 +48,7 @@ data HTMXExtension =
     deriving (Eq)
 
 instance Show HTMXExtension where
-    show :: HTMXExtenstion -> String
+    show :: HTMXExtension -> String
     show htmlExt = case htmlExt of
         JSONEnc -> "json-enc"
         MethodOverride -> "method-override"
@@ -57,24 +58,24 @@ instance Show HTMXExtension where
         PathDeps -> "path-deps"
         ClassTools -> "class-tools"
         RemoveMe -> "remove-me"
-        IncludedVals -> "included-vals"
+        IncludeVals -> "included-vals"
         AJAXHeader -> "ajax-header"
         EventHeader -> "event-header"
         Preload -> "preload"
         Other extName -> Text.unpack extName
 
 data HTMXExtensions =
-    HTMXExtensions (Set HtmxExtension)
-    | IgnoreHTMXExtensions (Set HTMXExtensions)
+    HTMXExtensions (Set HTMXExtension)
+    | IgnoreHTMXExtensions (Set HTMXExtension)
     deriving (Eq, Show)
 
 hx_ext_ :: HTMXExtensions -> Attribute
-hx_ext_ htmxExts = case htmxExts of
-    HtmxExtensions htmxExtSet -> htmxExtSetToText htmxExtSet
-    IgnoreHTMXExtensions htmxExtSet' -> "ignore:" <> (htmlExtSetToText htmxExtSet')
+hx_ext_ htmxExts = Base.hx_ext_ $ case htmxExts of
+    HTMXExtensions htmxExtSet -> htmxExtSetToText htmxExtSet
+    IgnoreHTMXExtensions htmxExtSet' -> "ignore:" <> (htmxExtSetToText htmxExtSet')
     where
-        htmxExtensionsToText :: Set HTMLExtension -> Text
-        htmxExtensionsToText htmlExtSet'' = case S.toList htmlExtSet'' of
+        htmxExtSetToText :: Set HTMXExtension -> Text
+        htmxExtSetToText htmxExtSet'' = case Set.toList htmxExtSet'' of
             [] -> ""
-            htmxExtList -> Text.intersperse ',' $ map (Text.pack . show) htmxExtsList
+            htmxExtList -> Text.intercalate "," $ Prelude.map (Text.pack . show) htmxExtList
 
