@@ -138,7 +138,14 @@ hx_push_url_ = Base.hx_delete_ . Servant.toUrlPiece
 hx_put_ :: Link -> Attribute
 hx_put_ = Base.hx_delete_ . Servant.toUrlPiece
 
-data MaybeJavaScript a = JustValue a | Javascript Text
+data MaybeJavaScript a = JustValue a | JavaScript Text
+    deriving (Eq)
+
+instance Show (MaybeJavaScript a) where
+    show :: MaybeJavaScript a -> String
+    show mbJS = case mbJS of
+        JustValue val -> show val
+        JavaScript expr -> "javascript:" <> (Text.unpack expr)
 
 data HXRequestArg = HXRequestArg
     { hxRequestArgTimeout :: MaybeJavaScript Int
@@ -158,15 +165,18 @@ data HXSSEArg = HXSSEArg
     { hxSSEArgConnect :: Link
     , hxSSEArgSwap :: Text
     }
-    deriving (Eq, Show, ToJSON)
+    deriving (Show, ToJSON)
 
 hx_sse_ :: HXSSEArg -> Attribute
 hx_sse_ = undefined
 
-data HXSwapOOBArg = HXSwapOOBArgTrue | HXSwapOOBSwapArg HXSwapArg | HXSwapOOBSwapArgWithQuery HXSwapArg a -- Make it GADTs
+data HXSwapOOBArg where
+    HXSwapOOBArgTrue :: HXSwapOOBArg
+    HXSwapOOBArgSwap :: HXSwapArg -> HXSwapOOBArg
+    HXSwapOOBArgSwapWithQuery :: ToCssSelector a => HXSwapArg -> a -> HXSwapOOBArg
     deriving (Eq, Show)
 
-hx_swap_oob_ :: HXSwapOOB -> Attribute
+hx_swap_oob_ :: HXSwapOOBArg -> Attribute
 hx_swap_oob_ = undefined
 
 data SwapPos =
@@ -181,22 +191,26 @@ data SwapPos =
 
 data SwapModSwap where
     SwapModSwap :: Int -> SwapModSwap
+    deriving (Eq, Show)
 
 data SwapModSettle where
     SwapModSettle :: Int -> SwapModSettle
+    deriving(Eq, Show)
 
 data SwapModView where
     SwapModViewScroll :: Maybe ScrollSelector -> Maybe ScrollMove -> SwapModView
     SwapModViewShow :: Maybe ScrollSelector -> Maybe ScrollMove -> SwapModView
+    deriving (Eq, Show)
 
 data ScrollSelector where
     ScrollSelectorQuery :: ToCssSelector a => a -> ScrollSelector
     ScrollSelectorWindow :: ScrollSelector
+    deriving (Eq, Show)
 
 data ScrollMove = ScrollMoveTop | ScrollMoveBottom
     deriving (Eq, Show)
 
-data HXSwapArg =
+data HXSwapArg = HXSwapArg
     { hxSwapArgPos :: SwapPos
     , hxSwapArgSwap :: Maybe SwapModSwap
     , hxSwapArgSettle :: Maybe SwapModSettle
