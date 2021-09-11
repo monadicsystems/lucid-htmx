@@ -20,12 +20,13 @@ extra-source-files:
 description:         Please see the README on GitHub at <https://github.com/githubuser/lucid-htmx#readme>
 
 dependencies:
+- aeson
 - base >= 4.7 && < 5
 - bytestring
 - containers
 - css-selectors
 - lucid
-# - servant takes too much memory!
+- servant
 - text
 
 library:

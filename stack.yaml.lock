@@ -3,11 +3,18 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
+packages:
+- completed:
+    hackage: css-selectors-0.4.0.3@sha256:54ee8b7f6816f2caab25f7b2374b489c93f8e86f9cca15b643405603a2da8205,2236
+    pantry-tree:
+      size: 972
+      sha256: e9805b76a80cf2c82c62259c2534748ce43d6ec7954a5c88d2e20a64e9d4b9bc
+  original:
+    hackage: css-selectors-0.4.0.3@sha256:54ee8b7f6816f2caab25f7b2374b489c93f8e86f9cca15b643405603a2da8205,2236
 snapshots:
-- original:
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/18/9.yaml
-  completed:
-    sha256: 9f9fe35c949414146840a985fb228fd397c504d1781b834bfc9ab935f4d27df6
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/18/9.yaml
+- completed:
     size: 586923
-packages: []
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/18/9.yaml
+    sha256: 9f9fe35c949414146840a985fb228fd397c504d1781b834bfc9ab935f4d27df6
+  original:
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/18/9.yaml

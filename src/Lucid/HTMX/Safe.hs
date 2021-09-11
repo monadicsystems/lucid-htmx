@@ -1,20 +1,26 @@
+{-# LANGUAGE GADTs #-}
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Lucid.HTMX.Safe where
 
-import Lucid.Base
-import Lucid.HTMX.Base as Base
+import qualified Css3.Selector as CssSelector
+import Css3.Selector (ToCssSelector)
+import qualified Data.Aeson as Aeson
+import Data.Aeson (FromJSON, ToJSON)
+import qualified Data.Set as Set
 import Data.Set (Set)
-import Data.Set as Set
+import qualified Data.Text as Text
 import Data.Text (Text)
-import Data.Text as Text
-import Data.Text.Encoding as Text
-import Data.ByteString.Lazy as LBS
--- import Servant.Links (Link)
--- import Servant.Links as Links
+import qualified Data.Text.Encoding as Text
+import qualified Data.ByteString.Lazy as LBS
+import Lucid.Base (Attribute)
+import qualified Lucid.HTMX.Base as Base
+import qualified Servant.API as Servant
+import Servant.API (ToHttpApiData(..))
+import Servant.Links (Link)
+import qualified Servant.Links as Servant
 
-type Link = Text -- Should represent a type-safe link from a library like servant
 
 -- | Makes hx_boost_ a "boolean attribute" since the only valid value for hx-boost is "true".
 hx_boost_ :: Attribute
@@ -24,7 +30,7 @@ hx_confirm_ :: Text -> Attribute
 hx_confirm_ = Base.hx_confirm_
 
 hx_delete_ :: Link -> Attribute
-hx_delete_ = undefined
+hx_delete_ = Base.hx_delete_ . Servant.toUrlPiece
 
 hx_disable_ :: Attribute
 hx_disable_ = Base.hx_disable_
@@ -33,7 +39,7 @@ hx_disable_ = Base.hx_disable_
 hx_encoding_ :: Attribute
 hx_encoding_ = Base.hx_encoding_ "multipart/form-data"
 
-data HTMXExtension =
+data HTMXExt =
     JSONEnc
     | MethodOverride
     | MorphdomSwap
@@ -49,9 +55,9 @@ data HTMXExtension =
     | Other Text
     deriving (Eq)
 
-instance Show HTMXExtension where
-    show :: HTMXExtension -> String
-    show htmlExt = case htmlExt of
+instance Show HTMXExt where
+    show :: HTMXExt -> String
+    show htmxExt = case htmxExt of
         JSONEnc -> "json-enc"
         MethodOverride -> "method-override"
         MorphdomSwap -> "morphdom-swap"
@@ -66,32 +72,14 @@ instance Show HTMXExtension where
         Preload -> "preload"
         Other extName -> Text.unpack extName
 
-data HTMXExtensions =
-    HTMXExtensions (Set HTMXExtension)
-    | IgnoreHTMXExtensions (Set HTMXExtension)
-    deriving (Eq, Show)
+hx_ext_ :: Set HTMXExt -> Attribute
+hx_ext_ = Base.hx_ext_ . Text.intercalate "," . Prelude.map (Text.pack . show) . Set.toList
 
-hx_ext_ :: HTMXExtensions -> Attribute
-hx_ext_ htmxExts = Base.hx_ext_ $ case htmxExts of
-    HTMXExtensions htmxExtSet -> htmxExtSetToText htmxExtSet
-    IgnoreHTMXExtensions htmxExtSet' -> "ignore:" <> (htmxExtSetToText htmxExtSet')
-    where
-        htmxExtSetToText :: Set HTMXExtension -> Text
-        htmxExtSetToText htmxExtSet'' = case Set.toList htmxExtSet'' of
-            [] -> ""
-            htmxExtList -> Text.intercalate "," $ Prelude.map (Text.pack . show) htmxExtList
+hx_ext_ignore_ :: Set HTMXExt -> Attribute
+hx_ext_ignore_ = Base.hx_ext_ . ("ignore:" <>) . Text.intercalate "," . Prelude.map (Text.pack . show) . Set.toList
 
-hx_get_ :: Link -> Text
-hx_get_ = undefined
-
--- Placeholder until I can bring in aeson...
-type JSON = Text
-
-class ToJSON a where
-    toJSON :: a -> JSON
-
-class FromJSON a where
-    fromJSON :: JSON -> a
+hx_get_ :: Link -> Attribute
+hx_get_ = Base.hx_get_ . Servant.toUrlPiece
 
 newtype JavaScript = JavaScript { unJavaScript :: Text } deriving (Eq)
 
@@ -99,48 +87,39 @@ instance Show JavaScript where
     show :: JavaScript -> String
     show (JavaScript unJS) = "javascript:" <> show unJS
 
-encode :: ToJSON a => a -> LBS.ByteString
-encode _ = ""
-
 -- | Value of hx_headers_ must be valid JSON
 hx_headers_ :: ToJSON a => a -> Attribute
-hx_headers_ = Base.hx_headers_ . Text.decodeUtf8 . LBS.toStrict . encode
+hx_headers_ = Base.hx_headers_ . Text.decodeUtf8 . LBS.toStrict . Aeson.encode
 
 hx_history_elt_ :: Attribute
 hx_history_elt_ = Base.hx_history_elt_
 
-data QuerySelector =
-    QuerySelectorTag Text
-    | QuerySelectorDot Text
-    | QuerySelectorHash Text
-    | QuerySelectorAttribute Text Text
-    deriving (Eq, Show)
+hx_include_ :: ToCssSelector a => a -> Attribute
+hx_include_ = Base.hx_include_ . CssSelector.toCssSelector
 
-hx_include_ :: QuerySelector -> Attribute
-hx_include_ = undefined
+hx_indicator_ :: ToCssSelector a => a -> Attribute
+hx_indicator_ = Base.hx_indicator_ . CssSelector.toCssSelector
 
-data HXIndicatorSelector = 
-    HXIndicatorSelector QuerySelector
-    | HXIndicatorSelectorClosest QuerySelector
+hx_indicator_closest_ :: ToCssSelector a => a -> Attribute
+hx_indicator_closest_ = Base.hx_indicator_ . ("closest " <>) . CssSelector.toCssSelector
 
-hx_indicator_ :: HXIndicatorSelector -> Attribute
-hx_indicator_ = undefined
+hx_params_ :: [Text] -> Attribute
+hx_params_ = Base.hx_params_ . Text.intercalate ","
 
-data HXParams =
-    HXParamsAll
-    | HXParamsNone
-    | HXParamsNotList (Set Text)
-    | HXParamsList (Set Text)
-    deriving (Eq, Show)
+hx_params_not_ :: [Text] -> Attribute
+hx_params_not_ = Base.hx_params_ . ("not " <>) . Text.intercalate ","
 
-hx_params_ :: HXParams -> Attribute
-hx_params_ = undefined
+hx_params_all_ :: Attribute
+hx_params_all_ = Base.hx_params_ "*"
+
+hx_params_none_ :: Attribute
+hx_params_none_ = Base.hx_params_ "none"
 
 hx_patch_ :: Link -> Attribute
-hx_patch_ = undefined
+hx_patch_ = Base.hx_patch_ . Servant.toUrlPiece
 
 hx_post_ :: Link -> Attribute
-hx_post_ = undefined
+hx_post_ = Base.hx_post_ . Servant.toUrlPiece
 
 -- For same reasons as hx_boost_
 hx_preserve_ :: Attribute
@@ -150,10 +129,10 @@ hx_prompt_ :: Text -> Attribute
 hx_prompt_ = Base.hx_prompt_
 
 hx_push_url_ :: Link -> Attribute
-hx_push_url_ = undefined
+hx_push_url_ = Base.hx_delete_ . Servant.toUrlPiece
 
 hx_put_ :: Link -> Attribute
-hx_put_ = undefined
+hx_put_ = Base.hx_delete_ . Servant.toUrlPiece
 
 -- Still needs more research below
 type HXRequest = Text
@@ -161,8 +140,8 @@ type HXRequest = Text
 hx_request_ :: HXRequest -> Attribute
 hx_request_ = undefined
 
-hx_select_ :: QuerySelector -> Attribute
-hx_select_ = undefined
+hx_select_ :: ToCssSelector a => a -> Attribute
+hx_select_ = Base.hx_select_ . CssSelector.toCssSelector
 
 -- More research
 type HXSSE = Text
@@ -175,17 +154,34 @@ type HXSwapOOB = Text
 hx_swap_oob_ :: HXSwapOOB -> Attribute
 hx_swap_oob_ = undefined
 
-data HXSwap =
-    HXSwapInner
-    | HXSwapOuter
-    | HXSwapBeforeBegin
-    | HXSwapAfterBegin
-    | HXSwapBeforeEnd
-    | HXSwapAfterEnd
-    | HXSwapNone
+data SwapPos =
+    SwapPosInner
+    | SwapPosOuter
+    | SwapPosBeforeBegin
+    | SwapPosAfterBegin
+    | SwapPosBeforeEnd
+    | SwapPosAfterEnd
+    | SwapPosNone
     deriving (Eq, Show)
 
-hx_swap_ :: HXSwap -> Attribute
+data ScrollSelector where
+    ScrollSelectorQuery :: ToCssSelector a => a -> ScrollSelector
+    ScrollSelectorWindow :: ScrollSelector
+
+data ScrollMove = ScrollMoveTop | ScrollMoveBottom
+    deriving (Eq, Show)
+
+data SwapModTiming where
+    SwapModSwap :: Int -> SwapModTiming
+    SwapModSettle :: Int -> SwapModTiming
+
+data SwapModScrolling where
+    SwapModScroll :: Maybe ScrollSelector -> Maybe ScrollMove -> SwapModScrolling
+    SwapModShow :: Maybe ScrollSelector -> Maybe ScrollMove -> SwapModScrolling
+
+data HXSwapVal = HXSwapVal SwapPos (Set SwapModTiming, Maybe SwapModScrolling)
+
+hx_swap_ :: HXSwapVal -> Attribute
 hx_swap_ = undefined
 
 -- More research
