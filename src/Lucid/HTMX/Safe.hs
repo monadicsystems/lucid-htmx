@@ -72,20 +72,22 @@ instance Show HTMXExt where
         Preload -> "preload"
         Other extName -> Text.unpack extName
 
-hx_ext_ :: Set HTMXExt -> Attribute
+type HXExtArg = Set HTMXExt
+
+hx_ext_ :: HXExtArg -> Attribute
 hx_ext_ = Base.hx_ext_ . Text.intercalate "," . Prelude.map (Text.pack . show) . Set.toList
 
-hx_ext_ignore_ :: Set HTMXExt -> Attribute
+hx_ext_ignore_ :: HXExtArg -> Attribute
 hx_ext_ignore_ = Base.hx_ext_ . ("ignore:" <>) . Text.intercalate "," . Prelude.map (Text.pack . show) . Set.toList
 
 hx_get_ :: Link -> Attribute
 hx_get_ = Base.hx_get_ . Servant.toUrlPiece
 
-newtype JavaScript = JavaScript { unJavaScript :: Text } deriving (Eq)
+-- newtype JavaScript = JavaScript { unJavaScript :: Text } deriving (Eq)
 
-instance Show JavaScript where
-    show :: JavaScript -> String
-    show (JavaScript unJS) = "javascript:" <> show unJS
+-- instance Show JavaScript where
+    -- show :: JavaScript -> String
+    -- show (JavaScript unJS) = "javascript:" <> show unJS
 
 -- | Value of hx_headers_ must be valid JSON
 hx_headers_ :: ToJSON a => a -> Attribute
@@ -103,10 +105,12 @@ hx_indicator_ = Base.hx_indicator_ . CssSelector.toCssSelector
 hx_indicator_closest_ :: ToCssSelector a => a -> Attribute
 hx_indicator_closest_ = Base.hx_indicator_ . ("closest " <>) . CssSelector.toCssSelector
 
-hx_params_ :: [Text] -> Attribute
+type HXParamArg = [Text]
+
+hx_params_ :: HXParamArg -> Attribute
 hx_params_ = Base.hx_params_ . Text.intercalate ","
 
-hx_params_not_ :: [Text] -> Attribute
+hx_params_not_ :: HXParamArg -> Attribute
 hx_params_not_ = Base.hx_params_ . ("not " <>) . Text.intercalate ","
 
 hx_params_all_ :: Attribute
@@ -134,22 +138,33 @@ hx_push_url_ = Base.hx_delete_ . Servant.toUrlPiece
 hx_put_ :: Link -> Attribute
 hx_put_ = Base.hx_delete_ . Servant.toUrlPiece
 
--- Still needs more research below
-type HXRequest = Text
+data MaybeJavaScript a = JustValue a | Javascript Text
 
-hx_request_ :: HXRequest -> Attribute
+data HXRequestArg = HXRequestArg
+    { hxRequestArgTimeout :: MaybeJavaScript Int
+    , hxRequestArgCredentials :: MaybeJavaScript Bool
+    , hxRequestArgNoHeaders :: MaybeJavaScript Bool
+    }
+    deriving (Eq, ToJSON)
+
+hx_request_ :: HXRequestArg -> Attribute
 hx_request_ = undefined
 
 hx_select_ :: ToCssSelector a => a -> Attribute
 hx_select_ = Base.hx_select_ . CssSelector.toCssSelector
 
 -- More research
-type HXSSE = Text
+data HXSSEArg = HXSSEArg
+    { hxSSEArgConnect :: Link
+    , hxSSEArgSwap :: Text
+    }
+    deriving (Eq, Show, ToJSON)
 
-hx_sse_ :: HXSSE -> Attribute
+hx_sse_ :: HXSSEArg -> Attribute
 hx_sse_ = undefined
 
-type HXSwapOOB = Text
+data HXSwapOOBArg = HXSwapOOBArgTrue | HXSwapOOBSwapArg HXSwapArg | HXSwapOOBSwapArgWithQuery HXSwapArg a -- Make it GADTs
+    deriving (Eq, Show)
 
 hx_swap_oob_ :: HXSwapOOB -> Attribute
 hx_swap_oob_ = undefined
@@ -164,6 +179,16 @@ data SwapPos =
     | SwapPosNone
     deriving (Eq, Show)
 
+data SwapModSwap where
+    SwapModSwap :: Int -> SwapModSwap
+
+data SwapModSettle where
+    SwapModSettle :: Int -> SwapModSettle
+
+data SwapModView where
+    SwapModViewScroll :: Maybe ScrollSelector -> Maybe ScrollMove -> SwapModView
+    SwapModViewShow :: Maybe ScrollSelector -> Maybe ScrollMove -> SwapModView
+
 data ScrollSelector where
     ScrollSelectorQuery :: ToCssSelector a => a -> ScrollSelector
     ScrollSelectorWindow :: ScrollSelector
@@ -171,17 +196,15 @@ data ScrollSelector where
 data ScrollMove = ScrollMoveTop | ScrollMoveBottom
     deriving (Eq, Show)
 
-data SwapModTiming where
-    SwapModSwap :: Int -> SwapModTiming
-    SwapModSettle :: Int -> SwapModTiming
+data HXSwapArg =
+    { hxSwapArgPos :: SwapPos
+    , hxSwapArgSwap :: Maybe SwapModSwap
+    , hxSwapArgSettle :: Maybe SwapModSettle
+    , hxSwapArgView :: SwapModView
+    }
+    deriving (Eq, Show)
 
-data SwapModScrolling where
-    SwapModScroll :: Maybe ScrollSelector -> Maybe ScrollMove -> SwapModScrolling
-    SwapModShow :: Maybe ScrollSelector -> Maybe ScrollMove -> SwapModScrolling
-
-data HXSwapVal = HXSwapVal SwapPos (Set SwapModTiming, Maybe SwapModScrolling)
-
-hx_swap_ :: HXSwapVal -> Attribute
+hx_swap_ :: HXSwapArg -> Attribute
 hx_swap_ = undefined
 
 -- More research
