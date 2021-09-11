@@ -9,6 +9,8 @@ import Data.Set (Set)
 import Data.Set as Set
 import Data.Text (Text)
 import Data.Text as Text
+import Data.Text.Encoding as Text
+import Data.ByteString.Lazy as LBS
 -- import Servant.Links (Link)
 -- import Servant.Links as Links
 
@@ -91,10 +93,18 @@ class ToJSON a where
 class FromJSON a where
     fromJSON :: JSON -> a
 
-newtype JavaScript = JavaScript { unJavaScript :: Text } deriving (Eq, Show)
+newtype JavaScript = JavaScript { unJavaScript :: Text } deriving (Eq)
 
+instance Show JavaScript where
+    show :: JavaScript -> String
+    show (JavaScript unJS) = "javascript:" <> show unJS
+
+encode :: ToJSON a => a -> LBS.ByteString
+encode _ = ""
+
+-- | Value of hx_headers_ must be valid JSON
 hx_headers_ :: ToJSON a => a -> Attribute
-hx_headers_ = undefined
+hx_headers_ = Base.hx_headers_ . Text.decodeUtf8 . LBS.toStrict . encode
 
 hx_history_elt_ :: Attribute
 hx_history_elt_ = Base.hx_history_elt_
