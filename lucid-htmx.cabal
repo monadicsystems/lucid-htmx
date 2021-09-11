@@ -29,6 +29,7 @@ library
       Lucid.HTMX
       Lucid.HTMX.Base
       Lucid.HTMX.Safe
+      Lucid.HTMX.Safe.Types
   other-modules:
       Paths_lucid_htmx
   hs-source-dirs:
