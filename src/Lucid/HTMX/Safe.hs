@@ -145,7 +145,7 @@ hx_put_ = Base.hx_put_ . Servant.toUrlPiece
 data MaybeJavaScript a = JustValue a | JavaScript Text
     deriving (Eq, Generic, ToJSON)
 
-instance Show (MaybeJavaScript a) where
+instance Show a => Show (MaybeJavaScript a) where
     show :: MaybeJavaScript a -> String
     show mbJS = case mbJS of
         JustValue val -> show val
@@ -156,7 +156,7 @@ data HXRequestArg = HXRequestArg
     , hxRequestArgCredentials :: MaybeJavaScript Bool
     , hxRequestArgNoHeaders :: MaybeJavaScript Bool
     }
-    deriving (Eq, Generic, ToJSON)
+    deriving (Eq, Generic, Show, ToJSON)
 
 hx_request_ :: HXRequestArg -> Attribute
 hx_request_ = undefined
@@ -166,8 +166,8 @@ hx_select_ = Base.hx_select_ . CssSelector.toCssSelector
 
 -- More research
 data HXSSEArg = HXSSEArg
-    { hxSSEArgConnect :: Link
-    , hxSSEArgSwap :: Text
+    { hxSSEArgConnect :: Maybe Link
+    , hxSSEArgSwap :: Maybe Text
     }
     deriving (Show)
 
@@ -175,15 +175,17 @@ hx_sse_ :: HXSSEArg -> Attribute
 hx_sse_ = undefined
 
 data HXSwapOOBArg where
-    HXSwapOOBArgTrue :: HXSwapOOBArg
+    HXSwapOOBArgOuter :: HXSwapOOBArg
     HXSwapOOBArgSwap :: HXSwapArg -> HXSwapOOBArg
     HXSwapOOBArgSwapWithQuery :: forall a. (Eq a, Show a, ToCssSelector a) => HXSwapArg -> a -> HXSwapOOBArg
 
+{-
 instance Eq HXSwapOOBArg where
     arg1 == arg2 = case (arg1, arg2) of
         (HXSwapOOBArgTrue, HXSwapOOBArgTrue) -> True
         ((HXSwapOOBArgSwap swapArg1), (HXSwapOOBArgSwap swapArg2)) -> swapArg1 == swapArg2
         ((HXSwapOOBArgSwapWithQuery swapArg1 selector1), (HXSwapOOBArgSwapWithQuery swapArg2 selector2)) -> swapArg1 == swapArg2 && selector1 == selector2
+-}
 
 hx_swap_oob_ :: HXSwapOOBArg -> Attribute
 hx_swap_oob_ = undefined
@@ -200,24 +202,24 @@ data SwapPos =
 
 data SwapModSwap where
     SwapModSwap :: Int -> SwapModSwap
-    deriving (Eq, Show)
+    --deriving (Eq, Show)
 
 data SwapModSettle where
     SwapModSettle :: Int -> SwapModSettle
-    deriving(Eq, Show)
+    --deriving(Eq, Show)
 
 data SwapModView where
     SwapModViewScroll :: Maybe ScrollSelector -> Maybe ScrollMove -> SwapModView
     SwapModViewShow :: Maybe ScrollSelector -> Maybe ScrollMove -> SwapModView
-    deriving (Eq, Show)
+    --deriving (Eq, Show)
 
 data ScrollSelector where
     ScrollSelectorQuery :: forall a. (Eq a, Show a, ToCssSelector a) => a -> ScrollSelector
     ScrollSelectorWindow :: ScrollSelector
-    deriving (Eq, Show)
+    --deriving (Eq, Show)
 
 data ScrollMove = ScrollMoveTop | ScrollMoveBottom
-    deriving (Eq, Show)
+    --deriving (Eq, Show)
 
 data HXSwapArg = HXSwapArg
     { hxSwapArgPos :: SwapPos
@@ -225,10 +227,32 @@ data HXSwapArg = HXSwapArg
     , hxSwapArgSettle :: Maybe SwapModSettle
     , hxSwapArgView :: SwapModView
     }
-    deriving (Eq, Show)
+    --deriving (Eq, Show)
 
 hx_swap_ :: HXSwapArg -> Attribute
 hx_swap_ = undefined
 
--- More research
+data HXTargetArg where
+    HXTargetArgThis :: HXTargetArg
+    HXTargetArgQuery :: (Eq a, Show a, ToCssSelector a) => a -> HXTargetArg
+    HXTargetArgQueryClosest :: (Eq a, Show a, ToCssSelector a) => a -> HXTargetArg
+    HXTargetArgQueryFind :: (Eq a, Show a, ToCssSelector a) => a -> HXTargetArg
+
+hx_target_ :: HXTargetArg -> Attribute
+hx_target_ = undefined
+
+type HXTriggerArg = Text
+
+hx_trigger_ :: HXTriggerArg -> Attribute
+hx_trigger_ = Base.hx_trigger_
+
+hx_vals_ :: ToJSON a => a -> Attribute
+hx_vals_ = Base.hx_headers_ . Text.decodeUtf8 . LBS.toStrict . Aeson.encode
+
+-- EXPERIMENTAL!!
+
+type HXWSArg = Text
+
+hx_ws_ :: HXWSArg -> Attribute
+hx_ws_ = Base.hx_ws_
 
