@@ -3,6 +3,4 @@ module Lucid.HTMX
    )
 where
 
--- import Lucid.HTMX.Attributes
 import Lucid.HTMX.Safe
-
