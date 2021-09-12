@@ -8,23 +8,20 @@
 
 module Lucid.HTMX.Safe where
 
-import qualified Css3.Selector as CssSelector
 import Css3.Selector (ToCssSelector(..))
 import qualified Data.Aeson as Aeson
-import Data.Aeson (FromJSON(..), ToJSON(..), Value(..), (.=))
+import Data.Aeson (ToJSON(..), Value(..), (.=))
 import qualified Data.Set as Set
 import Data.Set (Set)
 import qualified Data.Text as Text
 import Data.Text (Text)
 import qualified Data.Text.Encoding as Text
 import qualified Data.ByteString.Lazy as LBS
-import GHC.Generics (Generic)
 import Lucid.Base (Attribute)
 import qualified Lucid.HTMX.Base as Base
-import qualified Servant.API as Servant
+-- import qualified Servant.API as Servant
 import Servant.API (ToHttpApiData(..))
 import Servant.Links (Link)
-import qualified Servant.Links as Servant
 
 
 -- | Makes hx_boost_ a "boolean attribute" since the only valid value for hx-boost is "true".
@@ -35,7 +32,7 @@ hx_confirm_ :: Text -> Attribute
 hx_confirm_ = Base.hx_confirm_
 
 hx_delete_ :: Link -> Attribute
-hx_delete_ = Base.hx_delete_ . Servant.toUrlPiece
+hx_delete_ = Base.hx_delete_ . toUrlPiece
 
 hx_disable_ :: Attribute
 hx_disable_ = Base.hx_disable_
@@ -57,7 +54,7 @@ data HTMXExt =
     | AJAXHeader
     | EventHeader
     | Preload
-    | Other Text
+    | OtherHTMXExt Text
     deriving (Eq)
 
 -- TODO: Get rid of Show instance and implement seperate function for displaying
@@ -76,7 +73,7 @@ instance Show HTMXExt where
         AJAXHeader -> "ajax-header"
         EventHeader -> "event-header"
         Preload -> "preload"
-        Other extName -> Text.unpack extName
+        OtherHTMXExt extName -> Text.unpack extName
 
 data HXExtVal = HXExtVal (Set HTMXExt) | HXExtValIgnore (Set HTMXExt)
     deriving (Eq, Show)
@@ -87,7 +84,7 @@ hx_ext_ val = case val of
     HXExtValIgnore htmxExtSet -> Base.hx_ext_ . ("ignore:" <>) . Text.intercalate "," . Prelude.map (Text.pack . show) . Set.toList $ htmxExtSet
 
 hx_get_ :: Link -> Attribute
-hx_get_ = Base.hx_get_ . Servant.toUrlPiece
+hx_get_ = Base.hx_get_ . toUrlPiece
 
 -- | Value of hx_headers_ must be valid JSON
 hx_headers_ :: ToJSON a => a -> Attribute
@@ -123,10 +120,10 @@ hx_params_ val = case val of
     HXParamsValNone -> Base.hx_params_ "none"
 
 hx_patch_ :: Link -> Attribute
-hx_patch_ = Base.hx_patch_ . Servant.toUrlPiece
+hx_patch_ = Base.hx_patch_ . toUrlPiece
 
 hx_post_ :: Link -> Attribute
-hx_post_ = Base.hx_post_ . Servant.toUrlPiece
+hx_post_ = Base.hx_post_ . toUrlPiece
 
 -- For same reasons as hx_boost_
 hx_preserve_ :: Attribute
@@ -136,10 +133,10 @@ hx_prompt_ :: Text -> Attribute
 hx_prompt_ = Base.hx_prompt_
 
 hx_push_url_ :: Link -> Attribute
-hx_push_url_ = Base.hx_push_url_ . Servant.toUrlPiece
+hx_push_url_ = Base.hx_push_url_ . toUrlPiece
 
 hx_put_ :: Link -> Attribute
-hx_put_ = Base.hx_put_ . Servant.toUrlPiece
+hx_put_ = Base.hx_put_ . toUrlPiece
 
 data MaybeJavaScript a = JustValue a | JavaScript Text
     deriving (Eq, Show)
@@ -192,10 +189,11 @@ data HXSSEVal = HXSSEVal
 hx_sse_ :: HXSSEVal -> Attribute
 hx_sse_ val = Base.hx_sse_ $ case val of
     (HXSSEVal Nothing Nothing) -> ""
-    (HXSSEVal (Just link) Nothing) -> "connect:" <> (Servant.toUrlPiece link)
+    (HXSSEVal (Just link) Nothing) -> "connect:" <> (toUrlPiece link)
     (HXSSEVal Nothing (Just eventName)) -> "swap:" <> eventName
-    (HXSSEVal (Just link) (Just eventName)) -> "connect:" <> (Servant.toUrlPiece link) <> " " <> "swap:" <> eventName
+    (HXSSEVal (Just link) (Just eventName)) -> "connect:" <> (toUrlPiece link) <> " " <> "swap:" <> eventName
 
+-- TODO: Come up with better, shorter, more intuitive names for types
 data SwapPos =
     SwapPosInner
     | SwapPosOuter
@@ -245,19 +243,19 @@ data HXSwapVal = HXSwapVal
     }
     deriving (Eq, Show)
 
+pos :: SwapPos -> Text
+pos p = case p of
+    SwapPosInner -> "innerHTML"
+    SwapPosOuter -> "outerHTML"
+    SwapPosBeforeBegin -> "beforebegin"
+    SwapPosAfterBegin -> "afterbegin"
+    SwapPosBeforeEnd -> "beforeend"
+    SwapPosAfterEnd -> "afterend"
+    SwapPosNone -> "none"
+
 hx_swap_ :: HXSwapVal -> Attribute
 hx_swap_ HXSwapVal{..} = Base.hx_swap_ $ (pos hxSwapValPos) <> (swap hxSwapValSwap) <> (settle hxSwapValSettle) <> (view hxSwapValView)
     where
-        pos :: SwapPos -> Text
-        pos p = case p of
-            SwapPosInner -> "innerHTML"
-            SwapPosOuter -> "outerHTML"
-            SwapPosBeforeBegin -> "beforebegin"
-            SwapPosAfterBegin -> "afterbegin"
-            SwapPosBeforeEnd -> "beforeend"
-            SwapPosAfterEnd -> "afterend"
-            SwapPosNone -> "none"
-
         swap :: Maybe SwapModSwap -> Text
         swap s = case s of
             Nothing -> ""
@@ -274,7 +272,7 @@ hx_swap_ HXSwapVal{..} = Base.hx_swap_ $ (pos hxSwapValPos) <> (swap hxSwapValSw
             Just v' -> " " <> (viewPrefix v') <> (viewPostfix v')
             where
                 viewPostfix :: SwapModView -> Text
-                viewPostfix v = case v of
+                viewPostfix v' = case v' of
                     SwapModView _ sm ss -> case (sm, ss) of
                         (ScrollMoveTop, ss') -> (selectorPrefix ss') <> "top"
                         (ScrollMoveBottom, ss') -> (selectorPrefix ss') <> "bottom"
@@ -287,14 +285,14 @@ hx_swap_ HXSwapVal{..} = Base.hx_swap_ $ (pos hxSwapValPos) <> (swap hxSwapValSw
                         ScrollSelectorWindow -> "window:"
 
                 viewPrefix :: SwapModView -> Text
-                viewPrefix v = case v of
+                viewPrefix v' = case v' of
                       SwapModView SwapModViewTypeScroll _ _ -> "scroll:"
                       SwapModView SwapModViewTypeShow _ _ -> "show:"
 
 data HXSwapOOBVal where
     HXSwapOOBVal :: HXSwapOOBVal
-    HXSwapOOBValSwap :: HXSwapVal -> HXSwapOOBVal
-    HXSwapOOBValSwapSelector :: forall a. (Eq a, Show a, ToCssSelector a) => HXSwapVal -> a -> HXSwapOOBVal
+    HXSwapOOBValSwap :: SwapPos -> HXSwapOOBVal
+    HXSwapOOBValSwapSelector :: forall a. (Eq a, Show a, ToCssSelector a) => SwapPos -> a -> HXSwapOOBVal
 
 instance Show HXSwapOOBVal where
     show :: HXSwapOOBVal -> String
@@ -306,25 +304,34 @@ instance Eq HXSwapOOBVal where
     val1 == val2 = show val1 == show val2
 
 hx_swap_oob_ :: HXSwapOOBVal -> Attribute
-hx_swap_oob_ = undefined
+hx_swap_oob_ val = Base.hx_swap_oob_ $ case val of
+    HXSwapOOBVal -> "true"
+    HXSwapOOBValSwap swapPos -> pos swapPos
+    HXSwapOOBValSwapSelector swapPos selector -> (pos swapPos) <> ":" <> (toCssSelector selector)
 
 data HXTargetVal where
-    HXTargetVal :: HXTargetVal --TODO: Keep like normal or add This suffix?
+    HXTargetVal :: HXTargetVal --TODO: Keep like normal or add "This" suffix?
     HXTargetValSelector :: (Eq a, Show a, ToCssSelector a) => a -> HXTargetVal
     HXTargetValSelectorClosest :: (Eq a, Show a, ToCssSelector a) => a -> HXTargetVal
     HXTargetValSelectorFind :: (Eq a, Show a, ToCssSelector a) => a -> HXTargetVal
 
 hx_target_ :: HXTargetVal -> Attribute
-hx_target_ = undefined
+hx_target_ val = Base.hx_target_ $ case val of
+    HXTargetVal -> "this"
+    HXTargetValSelector selector -> toCssSelector selector
+    HXTargetValSelectorClosest selector -> "closest " <> (toCssSelector selector)
+    HXTargetValSelectorFind selector -> "find " <> (toCssSelector selector) 
+
+hx_vals_ :: ToJSON a => a -> Attribute
+hx_vals_ = Base.hx_vals_ . Text.decodeUtf8 . LBS.toStrict . Aeson.encode
 
 -- TODO: Study more. Basically all possible events plus event modifiers.
+-- type HXTriggerVal = Text
+
 type HXTriggerVal = Text
 
 hx_trigger_ :: HXTriggerVal -> Attribute
 hx_trigger_ = Base.hx_trigger_
-
-hx_vals_ :: ToJSON a => a -> Attribute
-hx_vals_ = Base.hx_vals_ . Text.decodeUtf8 . LBS.toStrict . Aeson.encode
 
 -- BELOW EXPERIMENTAL!!
 
@@ -335,4 +342,3 @@ hx_ws_ = Base.hx_ws_
 
 -- TODO: Add QuasiQuoters for parsing and generating values that are checked at compile time for the various arguments to the HTMX attributes.
 -- TODO: Write tests to check that the Val types are generating the correct Text for the HTMX attributes. Tests for HTMX tag functionality maybe?
-
