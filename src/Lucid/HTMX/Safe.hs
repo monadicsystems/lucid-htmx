@@ -221,7 +221,7 @@ data ScrollSelector where
 instance Show ScrollSelector where
     show :: ScrollSelector -> String
     show ss = case ss of
-        ScrollSelector q -> "ScrollSelector " <> show q
+        ScrollSelector q -> "ScrollSelector " <> (Text.unpack $ toCssSelector q)
         ScrollSelectorWindow -> "ScrollSelectorWindow"
 
 instance Eq ScrollSelector where
@@ -230,21 +230,66 @@ instance Eq ScrollSelector where
 data ScrollMove = ScrollMoveTop | ScrollMoveBottom
     deriving (Eq, Show)
 
+data SwapModViewType = SwapModViewTypeScroll | SwapModViewTypeShow
+    deriving (Eq, Show)
+
 data SwapModView where
-    SwapModViewScroll :: Maybe ScrollSelector -> Maybe ScrollMove -> SwapModView
-    SwapModViewShow :: Maybe ScrollSelector -> Maybe ScrollMove -> SwapModView
+    SwapModView :: SwapModViewType -> ScrollMove -> Maybe ScrollSelector -> SwapModView
     deriving (Eq, Show)
 
 data HXSwapVal = HXSwapVal
     { hxSwapValPos :: SwapPos
-    , hxSwapValSwap :: Maybe SwapModSwap
+    , hxSwapValSwap :: Maybe SwapModSwap -- Call this delay??
     , hxSwapValSettle :: Maybe SwapModSettle
-    , hxSwapValView :: SwapModView
+    , hxSwapValView :: Maybe SwapModView
     }
     deriving (Eq, Show)
 
 hx_swap_ :: HXSwapVal -> Attribute
-hx_swap_ = undefined
+hx_swap_ HXSwapVal{..} = Base.hx_swap_ $ (pos hxSwapValPos) <> (swap hxSwapValSwap) <> (settle hxSwapValSettle) <> (view hxSwapValView)
+    where
+        pos :: SwapPos -> Text
+        pos p = case p of
+            SwapPosInner -> "innerHTML"
+            SwapPosOuter -> "outerHTML"
+            SwapPosBeforeBegin -> "beforebegin"
+            SwapPosAfterBegin -> "afterbegin"
+            SwapPosBeforeEnd -> "beforeend"
+            SwapPosAfterEnd -> "afterend"
+            SwapPosNone -> "none"
+
+        swap :: Maybe SwapModSwap -> Text
+        swap s = case s of
+            Nothing -> ""
+            Just (SwapModSwap delay) -> " swap:" <> (Text.pack $ show delay) <> "s"
+
+        settle :: Maybe SwapModSettle -> Text
+        settle s = case s of
+            Nothing -> ""
+            Just (SwapModSettle delay) -> " settle:" <> (Text.pack $ show delay) <> "s"
+
+        view :: Maybe SwapModView -> Text
+        view v = case v of
+            Nothing -> ""
+            Just v' -> " " <> (viewPrefix v') <> (viewPostfix v')
+            where
+                viewPostfix :: SwapModView -> Text
+                viewPostfix v = case v of
+                    SwapModView _ sm ss -> case (sm, ss) of
+                        (ScrollMoveTop, ss') -> (selectorPrefix ss') <> "top"
+                        (ScrollMoveBottom, ss') -> (selectorPrefix ss') <> "bottom"
+
+                selectorPrefix :: Maybe ScrollSelector -> Text
+                selectorPrefix ss = case ss of
+                    Nothing -> ""
+                    Just ss' -> case ss' of
+                        ScrollSelector q -> (toCssSelector q) <> ":"
+                        ScrollSelectorWindow -> "window:"
+
+                viewPrefix :: SwapModView -> Text
+                viewPrefix v = case v of
+                      SwapModView SwapModViewTypeScroll _ _ -> "scroll:"
+                      SwapModView SwapModViewTypeShow _ _ -> "show:"
 
 data HXSwapOOBVal where
     HXSwapOOBVal :: HXSwapOOBVal
