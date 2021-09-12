@@ -112,4 +112,3 @@ hx_vals_ = makeAttribute "hx-vals"
 -- | <https://htmx.org/attributes/hx-ws/>
 hx_ws_ :: Text -> Attribute
 hx_ws_ = makeAttribute "hx-ws"
-
