@@ -81,14 +81,6 @@ instance Show HTMXExt where
 data HXExtVal = HXExtVal (Set HTMXExt) | HXExtValIgnore (Set HTMXExt)
     deriving (Eq, Show)
 
-{-
-hx_ext_ :: HXExtArg -> Attribute
-hx_ext_ = Base.hx_ext_ . Text.intercalate "," . Prelude.map (Text.pack . show) . Set.toList
-
-hx_ext_ignore_ :: HXExtArg -> Attribute
-hx_ext_ignore_ = Base.hx_ext_ . ("ignore:" <>) . Text.intercalate "," . Prelude.map (Text.pack . show) . Set.toList
--}
-
 hx_ext_ :: HXExtVal -> Attribute
 hx_ext_ val = case val of
     HXExtVal htmxExtSet -> Base.hx_ext_ . Text.intercalate "," . Prelude.map (Text.pack . show) . Set.toList $ htmxExtSet
@@ -105,7 +97,7 @@ hx_history_elt_ :: Attribute
 hx_history_elt_ = Base.hx_history_elt_
 
 hx_include_ :: ToCssSelector a => a -> Attribute
-hx_include_ = Base.hx_include_ . CssSelector.toCssSelector
+hx_include_ = Base.hx_include_ . toCssSelector
 
 data HXIndicatorVal where
     HXIndicatorVal :: ToCssSelector a => a -> HXIndicatorVal
@@ -113,16 +105,8 @@ data HXIndicatorVal where
 
 hx_indicator_ :: HXIndicatorVal -> Attribute 
 hx_indicator_ val = case val of
-    HXIndicatorVal selector -> Base.hx_indicator_ . CssSelector.toCssSelector $ selector
-    HXIndicatorValClosest selector -> Base.hx_indicator_ . ("closest " <>) . CssSelector.toCssSelector $ selector
-
-{-
-hx_indicator_ :: ToCssSelector a => a -> Attribute
-hx_indicator_ = Base.hx_indicator_ . CssSelector.toCssSelector
-
-hx_indicator_closest_ :: ToCssSelector a => a -> Attribute
-hx_indicator_closest_ = Base.hx_indicator_ . ("closest " <>) . CssSelector.toCssSelector
--}
+    HXIndicatorVal selector -> Base.hx_indicator_ . toCssSelector $ selector
+    HXIndicatorValClosest selector -> Base.hx_indicator_ . ("closest " <>) . toCssSelector $ selector
 
 data HXParamsVal where
     HXParamsVal :: [Text] -> HXParamsVal
@@ -137,22 +121,6 @@ hx_params_ val = case val of
     HXParamsValNot params -> Base.hx_params_ . ("not " <>) . Text.intercalate "," $ params
     HXParamsValAll -> Base.hx_params_ "*"
     HXParamsValNone -> Base.hx_params_ "none"
-
-{-
-type HXParamArg = [Text]
-
-hx_params_ :: HXParamArg -> Attribute
-hx_params_ = Base.hx_params_ . Text.intercalate ","
-
-hx_params_not_ :: HXParamArg -> Attribute
-hx_params_not_ = Base.hx_params_ . ("not " <>) . Text.intercalate ","
-
-hx_params_all_ :: Attribute
-hx_params_all_ = Base.hx_params_ "*"
-
-hx_params_none_ :: Attribute
-hx_params_none_ = Base.hx_params_ "none"
--}
 
 hx_patch_ :: Link -> Attribute
 hx_patch_ = Base.hx_patch_ . Servant.toUrlPiece
@@ -213,9 +181,8 @@ hx_request_ val = Base.hx_request_ $ case val of
     _ -> Text.decodeUtf8 . LBS.toStrict . Aeson.encode $ val
 
 hx_select_ :: ToCssSelector a => a -> Attribute
-hx_select_ = Base.hx_select_ . CssSelector.toCssSelector
+hx_select_ = Base.hx_select_ . toCssSelector
 
--- More research
 data HXSSEVal = HXSSEVal
     { hxSSEValConnect :: Maybe Link
     , hxSSEValSwap :: Maybe Text
@@ -225,25 +192,9 @@ data HXSSEVal = HXSSEVal
 hx_sse_ :: HXSSEVal -> Attribute
 hx_sse_ val = Base.hx_sse_ $ case val of
     (HXSSEVal Nothing Nothing) -> ""
-    (HXSSEVal (Just link) Nothing) -> undefined
-    (HXSSEVal Nothing (Just eventName)) -> undefined
-    (HXSSEVal (Just link) (Just eventName)) -> undefined
-
-data HXSwapOOBArg where
-    HXSwapOOBArgOuter :: HXSwapOOBArg
-    HXSwapOOBArgSwap :: HXSwapArg -> HXSwapOOBArg
-    HXSwapOOBArgSwapWithQuery :: forall a. (Eq a, Show a, ToCssSelector a) => HXSwapArg -> a -> HXSwapOOBArg
-
-{-
-instance Eq HXSwapOOBArg where
-    arg1 == arg2 = case (arg1, arg2) of
-        (HXSwapOOBArgTrue, HXSwapOOBArgTrue) -> True
-        ((HXSwapOOBArgSwap swapArg1), (HXSwapOOBArgSwap swapArg2)) -> swapArg1 == swapArg2
-        ((HXSwapOOBArgSwapWithQuery swapArg1 selector1), (HXSwapOOBArgSwapWithQuery swapArg2 selector2)) -> swapArg1 == swapArg2 && selector1 == selector2
--}
-
-hx_swap_oob_ :: HXSwapOOBArg -> Attribute
-hx_swap_oob_ = undefined
+    (HXSSEVal (Just link) Nothing) -> "connect:" <> (Servant.toUrlPiece link)
+    (HXSSEVal Nothing (Just eventName)) -> "swap:" <> eventName
+    (HXSSEVal (Just link) (Just eventName)) -> "connect:" <> (Servant.toUrlPiece link) <> " " <> "swap:" <> eventName
 
 data SwapPos =
     SwapPosInner
@@ -257,48 +208,74 @@ data SwapPos =
 
 data SwapModSwap where
     SwapModSwap :: Int -> SwapModSwap
-    --deriving (Eq, Show)
+    deriving (Eq, Show)
 
 data SwapModSettle where
     SwapModSettle :: Int -> SwapModSettle
-    --deriving(Eq, Show)
+    deriving(Eq, Show)
+
+data ScrollSelector where
+    ScrollSelector :: forall a. (Eq a, Show a, ToCssSelector a) => a -> ScrollSelector
+    ScrollSelectorWindow :: ScrollSelector
+
+instance Show ScrollSelector where
+    show :: ScrollSelector -> String
+    show ss = case ss of
+        ScrollSelector q -> "ScrollSelector " <> show q
+        ScrollSelectorWindow -> "ScrollSelectorWindow"
+
+instance Eq ScrollSelector where
+    ss1 == ss2 = show ss1 == show ss2
+
+data ScrollMove = ScrollMoveTop | ScrollMoveBottom
+    deriving (Eq, Show)
 
 data SwapModView where
     SwapModViewScroll :: Maybe ScrollSelector -> Maybe ScrollMove -> SwapModView
     SwapModViewShow :: Maybe ScrollSelector -> Maybe ScrollMove -> SwapModView
-    --deriving (Eq, Show)
+    deriving (Eq, Show)
 
-data ScrollSelector where
-    ScrollSelectorQuery :: forall a. (Eq a, Show a, ToCssSelector a) => a -> ScrollSelector
-    ScrollSelectorWindow :: ScrollSelector
-    --deriving (Eq, Show)
-
-data ScrollMove = ScrollMoveTop | ScrollMoveBottom
-    --deriving (Eq, Show)
-
-data HXSwapArg = HXSwapArg
-    { hxSwapArgPos :: SwapPos
-    , hxSwapArgSwap :: Maybe SwapModSwap
-    , hxSwapArgSettle :: Maybe SwapModSettle
-    , hxSwapArgView :: SwapModView
+data HXSwapVal = HXSwapVal
+    { hxSwapValPos :: SwapPos
+    , hxSwapValSwap :: Maybe SwapModSwap
+    , hxSwapValSettle :: Maybe SwapModSettle
+    , hxSwapValView :: SwapModView
     }
-    --deriving (Eq, Show)
+    deriving (Eq, Show)
 
-hx_swap_ :: HXSwapArg -> Attribute
+hx_swap_ :: HXSwapVal -> Attribute
 hx_swap_ = undefined
 
-data HXTargetArg where
-    HXTargetArgThis :: HXTargetArg
-    HXTargetArgQuery :: (Eq a, Show a, ToCssSelector a) => a -> HXTargetArg
-    HXTargetArgQueryClosest :: (Eq a, Show a, ToCssSelector a) => a -> HXTargetArg
-    HXTargetArgQueryFind :: (Eq a, Show a, ToCssSelector a) => a -> HXTargetArg
+data HXSwapOOBVal where
+    HXSwapOOBVal :: HXSwapOOBVal
+    HXSwapOOBValSwap :: HXSwapVal -> HXSwapOOBVal
+    HXSwapOOBValSwapSelector :: forall a. (Eq a, Show a, ToCssSelector a) => HXSwapVal -> a -> HXSwapOOBVal
 
-hx_target_ :: HXTargetArg -> Attribute
+instance Show HXSwapOOBVal where
+    show :: HXSwapOOBVal -> String
+    show HXSwapOOBVal = "HXSwapOOBVal"
+    show (HXSwapOOBValSwap hxSwapVal) = "HXSwapOOBValSwap " <> show hxSwapVal
+    show (HXSwapOOBValSwapSelector hxSwapVal sel) = "HXSwapOOBValSwap " <> show hxSwapVal <> " " <> show sel
+
+instance Eq HXSwapOOBVal where
+    val1 == val2 = show val1 == show val2
+
+hx_swap_oob_ :: HXSwapOOBVal -> Attribute
+hx_swap_oob_ = undefined
+
+data HXTargetVal where
+    HXTargetVal :: HXTargetVal --TODO: Keep like normal or add This suffix?
+    HXTargetValSelector :: (Eq a, Show a, ToCssSelector a) => a -> HXTargetVal
+    HXTargetValSelectorClosest :: (Eq a, Show a, ToCssSelector a) => a -> HXTargetVal
+    HXTargetValSelectorFind :: (Eq a, Show a, ToCssSelector a) => a -> HXTargetVal
+
+hx_target_ :: HXTargetVal -> Attribute
 hx_target_ = undefined
 
-type HXTriggerArg = Text
+-- TODO: Study more. Basically all possible events plus event modifiers.
+type HXTriggerVal = Text
 
-hx_trigger_ :: HXTriggerArg -> Attribute
+hx_trigger_ :: HXTriggerVal -> Attribute
 hx_trigger_ = Base.hx_trigger_
 
 hx_vals_ :: ToJSON a => a -> Attribute
@@ -306,8 +283,11 @@ hx_vals_ = Base.hx_vals_ . Text.decodeUtf8 . LBS.toStrict . Aeson.encode
 
 -- BELOW EXPERIMENTAL!!
 
-type HXWSArg = Text
+type HXWSVal = Text
 
-hx_ws_ :: HXWSArg -> Attribute
+hx_ws_ :: HXWSVal -> Attribute
 hx_ws_ = Base.hx_ws_
+
+-- TODO: Add QuasiQuoters for parsing and generating values that are checked at compile time for the various arguments to the HTMX attributes.
+-- TODO: Write tests to check that the Val types are generating the correct Text for the HTMX attributes. Tests for HTMX tag functionality maybe?
 
