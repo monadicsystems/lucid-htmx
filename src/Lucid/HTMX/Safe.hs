@@ -4,13 +4,14 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards #-}
 
 module Lucid.HTMX.Safe where
 
 import qualified Css3.Selector as CssSelector
-import Css3.Selector (ToCssSelector)
+import Css3.Selector (ToCssSelector(..))
 import qualified Data.Aeson as Aeson
-import Data.Aeson (FromJSON, ToJSON)
+import Data.Aeson (FromJSON(..), ToJSON(..), Value(..), (.=))
 import qualified Data.Set as Set
 import Data.Set (Set)
 import qualified Data.Text as Text
@@ -59,6 +60,7 @@ data HTMXExt =
     | Other Text
     deriving (Eq)
 
+-- TODO: Get rid of Show instance and implement seperate function for displaying
 instance Show HTMXExt where
     show :: HTMXExt -> String
     show htmxExt = case htmxExt of
@@ -76,22 +78,24 @@ instance Show HTMXExt where
         Preload -> "preload"
         Other extName -> Text.unpack extName
 
-type HXExtArg = Set HTMXExt
+data HXExtVal = HXExtVal (Set HTMXExt) | HXExtValIgnore (Set HTMXExt)
+    deriving (Eq, Show)
 
+{-
 hx_ext_ :: HXExtArg -> Attribute
 hx_ext_ = Base.hx_ext_ . Text.intercalate "," . Prelude.map (Text.pack . show) . Set.toList
 
 hx_ext_ignore_ :: HXExtArg -> Attribute
 hx_ext_ignore_ = Base.hx_ext_ . ("ignore:" <>) . Text.intercalate "," . Prelude.map (Text.pack . show) . Set.toList
+-}
+
+hx_ext_ :: HXExtVal -> Attribute
+hx_ext_ val = case val of
+    HXExtVal htmxExtSet -> Base.hx_ext_ . Text.intercalate "," . Prelude.map (Text.pack . show) . Set.toList $ htmxExtSet
+    HXExtValIgnore htmxExtSet -> Base.hx_ext_ . ("ignore:" <>) . Text.intercalate "," . Prelude.map (Text.pack . show) . Set.toList $ htmxExtSet
 
 hx_get_ :: Link -> Attribute
 hx_get_ = Base.hx_get_ . Servant.toUrlPiece
-
--- newtype JavaScript = JavaScript { unJavaScript :: Text } deriving (Eq)
-
--- instance Show JavaScript where
-    -- show :: JavaScript -> String
-    -- show (JavaScript unJS) = "javascript:" <> show unJS
 
 -- | Value of hx_headers_ must be valid JSON
 hx_headers_ :: ToJSON a => a -> Attribute
@@ -103,12 +107,38 @@ hx_history_elt_ = Base.hx_history_elt_
 hx_include_ :: ToCssSelector a => a -> Attribute
 hx_include_ = Base.hx_include_ . CssSelector.toCssSelector
 
+data HXIndicatorVal where
+    HXIndicatorVal :: ToCssSelector a => a -> HXIndicatorVal
+    HXIndicatorValClosest :: ToCssSelector a => a -> HXIndicatorVal
+
+hx_indicator_ :: HXIndicatorVal -> Attribute 
+hx_indicator_ val = case val of
+    HXIndicatorVal selector -> Base.hx_indicator_ . CssSelector.toCssSelector $ selector
+    HXIndicatorValClosest selector -> Base.hx_indicator_ . ("closest " <>) . CssSelector.toCssSelector $ selector
+
+{-
 hx_indicator_ :: ToCssSelector a => a -> Attribute
 hx_indicator_ = Base.hx_indicator_ . CssSelector.toCssSelector
 
 hx_indicator_closest_ :: ToCssSelector a => a -> Attribute
 hx_indicator_closest_ = Base.hx_indicator_ . ("closest " <>) . CssSelector.toCssSelector
+-}
 
+data HXParamsVal where
+    HXParamsVal :: [Text] -> HXParamsVal
+    HXParamsValNot :: [Text] -> HXParamsVal
+    HXParamsValAll :: HXParamsVal
+    HXParamsValNone :: HXParamsVal
+    deriving (Eq, Show)
+
+hx_params_ :: HXParamsVal -> Attribute
+hx_params_ val = case val of
+    HXParamsVal params -> Base.hx_params_ . Text.intercalate "," $ params
+    HXParamsValNot params -> Base.hx_params_ . ("not " <>) . Text.intercalate "," $ params
+    HXParamsValAll -> Base.hx_params_ "*"
+    HXParamsValNone -> Base.hx_params_ "none"
+
+{-
 type HXParamArg = [Text]
 
 hx_params_ :: HXParamArg -> Attribute
@@ -122,6 +152,7 @@ hx_params_all_ = Base.hx_params_ "*"
 
 hx_params_none_ :: Attribute
 hx_params_none_ = Base.hx_params_ "none"
+-}
 
 hx_patch_ :: Link -> Attribute
 hx_patch_ = Base.hx_patch_ . Servant.toUrlPiece
@@ -143,36 +174,60 @@ hx_put_ :: Link -> Attribute
 hx_put_ = Base.hx_put_ . Servant.toUrlPiece
 
 data MaybeJavaScript a = JustValue a | JavaScript Text
-    deriving (Eq, Generic, ToJSON)
+    deriving (Eq, Show)
 
+instance ToJSON a => ToJSON (MaybeJavaScript a) where
+    toJSON :: MaybeJavaScript a -> Value
+    toJSON mbJS = case mbJS of
+        JustValue val -> toJSON val
+        JavaScript expr -> String expr
+
+{-
 instance Show a => Show (MaybeJavaScript a) where
     show :: MaybeJavaScript a -> String
     show mbJS = case mbJS of
         JustValue val -> show val
-        JavaScript expr -> "javascript:" <> (Text.unpack expr)
+        JavaScript expr -> Text.unpack expr
+-}
 
-data HXRequestArg = HXRequestArg
-    { hxRequestArgTimeout :: MaybeJavaScript Int
-    , hxRequestArgCredentials :: MaybeJavaScript Bool
-    , hxRequestArgNoHeaders :: MaybeJavaScript Bool
+data HXRequestVal = HXRequestVal
+    { hxRequestValTimeout :: MaybeJavaScript Int
+    , hxRequestValCredentials :: MaybeJavaScript Bool
+    , hxRequestValNoHeaders :: MaybeJavaScript Bool
     }
-    deriving (Eq, Generic, Show, ToJSON)
+    deriving (Eq, Show)
 
-hx_request_ :: HXRequestArg -> Attribute
-hx_request_ = undefined
+instance ToJSON HXRequestVal where
+    toJSON :: HXRequestVal -> Value
+    toJSON HXRequestVal{..} = Aeson.object
+        [ "timeout" .= hxRequestValTimeout
+        , "credentials" .= hxRequestValCredentials
+        , "noHeaders" .= hxRequestValNoHeaders
+        ]
+
+hx_request_ :: HXRequestVal -> Attribute
+hx_request_ val = Base.hx_request_ $ case val of
+    (HXRequestVal (JavaScript _) _ _) -> ("javascript:" <>) . Text.decodeUtf8 . LBS.toStrict . Aeson.encode $ val
+    (HXRequestVal _ (JavaScript _) _) -> ("javascript:" <>) . Text.decodeUtf8 . LBS.toStrict . Aeson.encode $ val
+    (HXRequestVal _ _ (JavaScript _)) -> ("javascript:" <>) . Text.decodeUtf8 . LBS.toStrict . Aeson.encode $ val
+    _ -> Text.decodeUtf8 . LBS.toStrict . Aeson.encode $ val
 
 hx_select_ :: ToCssSelector a => a -> Attribute
 hx_select_ = Base.hx_select_ . CssSelector.toCssSelector
 
 -- More research
-data HXSSEArg = HXSSEArg
-    { hxSSEArgConnect :: Maybe Link
-    , hxSSEArgSwap :: Maybe Text
+data HXSSEVal = HXSSEVal
+    { hxSSEValConnect :: Maybe Link
+    , hxSSEValSwap :: Maybe Text
     }
     deriving (Show)
 
-hx_sse_ :: HXSSEArg -> Attribute
-hx_sse_ = undefined
+hx_sse_ :: HXSSEVal -> Attribute
+hx_sse_ val = Base.hx_sse_ $ case val of
+    (HXSSEVal Nothing Nothing) -> ""
+    (HXSSEVal (Just link) Nothing) -> undefined
+    (HXSSEVal Nothing (Just eventName)) -> undefined
+    (HXSSEVal (Just link) (Just eventName)) -> undefined
 
 data HXSwapOOBArg where
     HXSwapOOBArgOuter :: HXSwapOOBArg
@@ -247,9 +302,9 @@ hx_trigger_ :: HXTriggerArg -> Attribute
 hx_trigger_ = Base.hx_trigger_
 
 hx_vals_ :: ToJSON a => a -> Attribute
-hx_vals_ = Base.hx_headers_ . Text.decodeUtf8 . LBS.toStrict . Aeson.encode
+hx_vals_ = Base.hx_vals_ . Text.decodeUtf8 . LBS.toStrict . Aeson.encode
 
--- EXPERIMENTAL!!
+-- BELOW EXPERIMENTAL!!
 
 type HXWSArg = Text
 
