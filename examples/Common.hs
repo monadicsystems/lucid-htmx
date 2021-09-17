@@ -24,3 +24,8 @@ baseHtml title innerHtml = do
         script_ [src_ "https://unpkg.com/htmx.org@1.5.0"] blankHtml
 
     body_ innerHtml
+
+
+textStyle_ = classes_ ["text-xl", "text-semibold"]
+
+buttonStyle_ color = classes_ ["px-4", "py-2", "bg-"<>color, "text-lg", "text-white", "rounded-md", "mt-5"]

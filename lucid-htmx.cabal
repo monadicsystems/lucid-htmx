@@ -42,6 +42,7 @@ library
     , bytestring
     , containers
     , css-selectors
+    , hasql-th
     , lucid
     , servant
     , servant-lucid
@@ -64,6 +65,7 @@ executable lucid-htmx-ex0-exe
     , bytestring
     , containers
     , css-selectors
+    , hasql-th
     , lucid
     , lucid-htmx
     , servant
@@ -87,6 +89,7 @@ executable lucid-htmx-ex1-exe
     , bytestring
     , containers
     , css-selectors
+    , hasql-th
     , lucid
     , lucid-htmx
     , servant
@@ -109,6 +112,7 @@ executable lucid-htmx-exe
     , bytestring
     , containers
     , css-selectors
+    , hasql-th
     , lucid
     , lucid-htmx
     , servant
@@ -132,6 +136,7 @@ test-suite lucid-htmx-test
     , bytestring
     , containers
     , css-selectors
+    , hasql-th
     , lucid
     , lucid-htmx
     , servant

@@ -25,6 +25,7 @@ import Servant.HTML.Lucid
 import Servant.Links
 import Servant.Server
 
+
 data HomepageData = HomepageData
     { homepageDataLine1 :: Text
     , homepageDataLine2 :: Text
@@ -76,10 +77,6 @@ homepageDataLink = safeLink api homepageEndpoint
 
 clickedLink :: Link
 clickedLink = safeLink api clickedEndpoint
-
-textStyle_ = classes_ ["text-xl", "text-semibold"]
-
-buttonStyle_ color = classes_ ["px-4", "py-2", "bg-"<>color, "text-lg", "text-white", "rounded-md", "mt-5"]
 
 instance ToHtml HomepageData where
     toHtml HomepageData{..} = baseHtml "Example 0" $ do

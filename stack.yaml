@@ -37,6 +37,9 @@ packages:
 #
 extra-deps:
   - css-selectors-0.4.0.3@sha256:54ee8b7f6816f2caab25f7b2374b489c93f8e86f9cca15b643405603a2da8205,2236
+  - hasql-th-0.4.0.9@sha256:56515d8d08d4c68e36899a46624ecd1505608cf6b4c24b5c33aee54bc76e6275,2245
+  - headed-megaparsec-0.2.0.1@sha256:4bb2f1e68d2972e6b40ede202708c81b2e2fe83c454e439f27f47d1fdf7c8697,1571
+  - postgresql-syntax-0.4@sha256:df8b65a33f4088eddad25cedbec814e5f34f8e8ae55065139b73bd6da0d66f21,4176
   - servant-lucid-0.9.0.2@sha256:693278d574dba7313e931200118424762c02682bbc654e8866be4e6d1c73d816,1803
 # - acme-missiles-0.3
 # - git: https://github.com/commercialhaskell/stack.git

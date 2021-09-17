@@ -136,10 +136,10 @@ pos p = case p of
 hx_swap_ :: HXSwapVal -> Attribute
 hx_swap_ HXSwapVal{..} = Base.hx_swap_ $ (pos hxSwapValPos) <> (swap hxSwapValSwap) <> (settle hxSwapValSettle) <> (view hxSwapValView)
     where
-        swap :: Maybe SwapModSwap -> Text
+        swap :: Maybe SwapModDelay -> Text
         swap s = case s of
             Nothing -> ""
-            Just (SwapModSwap delay) -> " swap:" <> (Text.pack $ show delay) <> "s"
+            Just (SwapModDelay delay) -> " swap:" <> (Text.pack $ show delay) <> "s"
 
         settle :: Maybe SwapModSettle -> Text
         settle s = case s of

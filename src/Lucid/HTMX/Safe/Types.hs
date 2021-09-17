@@ -95,8 +95,8 @@ data SwapPos =
     | SwapPosNone
     deriving (Eq, Show)
 
-data SwapModSwap where
-    SwapModSwap :: Int -> SwapModSwap
+data SwapModDelay where
+    SwapModDelay :: Int -> SwapModDelay
     deriving (Eq, Show)
 
 data SwapModSettle where
@@ -128,7 +128,7 @@ data SwapModView where
 
 data HXSwapVal = HXSwapVal
     { hxSwapValPos :: SwapPos
-    , hxSwapValSwap :: Maybe SwapModSwap -- Call this delay??
+    , hxSwapValSwap :: Maybe SwapModDelay
     , hxSwapValSettle :: Maybe SwapModSettle
     , hxSwapValView :: Maybe SwapModView
     }

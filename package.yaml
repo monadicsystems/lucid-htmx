@@ -25,6 +25,7 @@ dependencies:
 - bytestring
 - containers
 - css-selectors
+- hasql-th
 - lucid
 - servant
 - servant-lucid
