@@ -26,7 +26,8 @@ import Servant.Links
 import Servant.Server
 
 data HomepageData = HomepageData
-    { homepageDataHeader :: Text
+    { homepageDataLine1 :: Text
+    , homepageDataLine2 :: Text
     }
     deriving (Eq, Show)
 
@@ -47,7 +48,8 @@ type API = Homepage :<|> Clicked
 
 homepageHandler :: Handler HomepageData
 homepageHandler = return $ HomepageData
-    { homepageDataHeader = "Welcome to my cool website! Click the button so I can introduce myself."
+    { homepageDataLine1 = "Welcome to my cool website that I built with Haskell, HTMX, and TailwindCSS!"
+    , homepageDataLine2 = "Click the button so I can introduce myself."
     }
 
 clickedHandler :: Handler MyData
@@ -75,29 +77,36 @@ homepageDataLink = safeLink api homepageEndpoint
 clickedLink :: Link
 clickedLink = safeLink api clickedEndpoint
 
+textStyle_ = classes_ ["text-xl", "text-semibold"]
+
+buttonStyle_ color = classes_ ["px-4", "py-2", "bg-"<>color, "text-lg", "text-white", "rounded-md", "mt-5"]
+
 instance ToHtml HomepageData where
     toHtml HomepageData{..} = baseHtml "Example 0" $ do
     -- TODO: Make QuasiQuoter for lucid attributes
-        div_ [id_ "parent-div"] $ do
-            h1_ [] $ toHtml homepageDataHeader
+        div_ [id_ "parent-div", class_ "m-20"] $ do
+            p_ [textStyle_] $ toHtml homepageDataLine1
+            p_ [textStyle_] $ toHtml homepageDataLine2
             button_
                 [ hx_get_ clickedLink
                 , hx_swap_ (HXSwapVal SwapPosInner Nothing Nothing Nothing)
                 , hx_target_ (HXTargetValSelector [csssel|#parent-div|])
+                , buttonStyle_ "green-400"
                 ]
                 "Click Me"
     toHtmlRaw = toHtml
 
 instance ToHtml MyData where
     toHtml MyData{..} = do
-        h1_ [] $ "Hello, my name is " <> (toHtml myDataName) <> "."
-        p_ [] $ "My favorite color is " <> (toHtml myDataFavColor) <> "."
-        p_ [] $ "Nice to meet you!"
-        p_ [] $ "Click the button below to go back!"
+        p_ [textStyle_] $ "Hello, my name is " <> (toHtml myDataName) <> "."
+        p_ [textStyle_] $ "My favorite color is " <> (span_ [class_ "text-green-500"] (toHtml myDataFavColor)) <> "."
+        p_ [textStyle_] $ "Nice to meet you!"
+        p_ [textStyle_] $ "Click the button below to go back!"
         button_ 
             [ hx_get_ homepageDataLink
             , hx_swap_ (HXSwapVal SwapPosOuter Nothing Nothing Nothing)
             , hx_target_ (HXTargetValSelector [csssel|#parent-div|])
+            , buttonStyle_ "red-400"
             ]
             "Go Back"
     toHtmlRaw = toHtml
