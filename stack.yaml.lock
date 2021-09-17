@@ -11,6 +11,13 @@ packages:
       sha256: e9805b76a80cf2c82c62259c2534748ce43d6ec7954a5c88d2e20a64e9d4b9bc
   original:
     hackage: css-selectors-0.4.0.3@sha256:54ee8b7f6816f2caab25f7b2374b489c93f8e86f9cca15b643405603a2da8205,2236
+- completed:
+    hackage: servant-lucid-0.9.0.2@sha256:693278d574dba7313e931200118424762c02682bbc654e8866be4e6d1c73d816,1803
+    pantry-tree:
+      size: 392
+      sha256: c5635bc53887b81087c3430341790d45cd4063340a0baa62bedd2e77ed4aa84d
+  original:
+    hackage: servant-lucid-0.9.0.2@sha256:693278d574dba7313e931200118424762c02682bbc654e8866be4e6d1c73d816,1803
 snapshots:
 - completed:
     size: 586923

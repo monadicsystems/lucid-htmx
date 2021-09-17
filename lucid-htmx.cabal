@@ -44,7 +44,56 @@ library
     , css-selectors
     , lucid
     , servant
+    , servant-lucid
+    , servant-server
     , text
+    , warp
+  default-language: Haskell2010
+
+executable lucid-htmx-ex0-exe
+  main-is: example0/Main.hs
+  other-modules:
+      Common
+      Paths_lucid_htmx
+  hs-source-dirs:
+      examples
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , css-selectors
+    , lucid
+    , lucid-htmx
+    , servant
+    , servant-lucid
+    , servant-server
+    , text
+    , warp
+  default-language: Haskell2010
+
+executable lucid-htmx-ex1-exe
+  main-is: example1/Main.hs
+  other-modules:
+      Common
+      Paths_lucid_htmx
+  hs-source-dirs:
+      examples
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , css-selectors
+    , lucid
+    , lucid-htmx
+    , servant
+    , servant-lucid
+    , servant-server
+    , text
+    , warp
   default-language: Haskell2010
 
 executable lucid-htmx-exe
@@ -63,7 +112,10 @@ executable lucid-htmx-exe
     , lucid
     , lucid-htmx
     , servant
+    , servant-lucid
+    , servant-server
     , text
+    , warp
   default-language: Haskell2010
 
 test-suite lucid-htmx-test
@@ -83,5 +135,8 @@ test-suite lucid-htmx-test
     , lucid
     , lucid-htmx
     , servant
+    , servant-lucid
+    , servant-server
     , text
+    , warp
   default-language: Haskell2010

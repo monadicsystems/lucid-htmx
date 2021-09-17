@@ -27,7 +27,10 @@ dependencies:
 - css-selectors
 - lucid
 - servant
+- servant-lucid
+- servant-server
 - text
+- warp
 
 library:
   source-dirs: src
@@ -36,6 +39,28 @@ executables:
   lucid-htmx-exe:
     main:                Main.hs
     source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - lucid-htmx
+  
+  lucid-htmx-ex0-exe:
+    main: example0/Main.hs
+    source-dirs:
+    - examples
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - lucid-htmx
+
+  lucid-htmx-ex1-exe:
+    main: example1/Main.hs
+    source-dirs:
+    - examples
     ghc-options:
     - -threaded
     - -rtsopts

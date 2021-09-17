@@ -22,6 +22,7 @@ import Lucid.HTMX.Safe.Types
 import Servant.API (ToHttpApiData(..))
 import Servant.Links (Link)
 
+toUrlPiece' = ("/" <>) . toUrlPiece
 
 -- | Makes hx_boost_ a "boolean attribute" since the only valid value for hx-boost is "true".
 hx_boost_ :: Attribute
@@ -31,7 +32,7 @@ hx_confirm_ :: Text -> Attribute
 hx_confirm_ = Base.hx_confirm_
 
 hx_delete_ :: Link -> Attribute
-hx_delete_ = Base.hx_delete_ . toUrlPiece
+hx_delete_ = Base.hx_delete_ . toUrlPiece'
 
 hx_disable_ :: Attribute
 hx_disable_ = Base.hx_disable_
@@ -62,7 +63,7 @@ hx_ext_ val = case val of
     HXExtValIgnore htmxExtSet -> Base.hx_ext_ . ("ignore:" <>) . Text.intercalate "," . Prelude.map getHTMXExtName . Set.toList $ htmxExtSet
 
 hx_get_ :: Link -> Attribute
-hx_get_ = Base.hx_get_ . toUrlPiece
+hx_get_ = Base.hx_get_ . toUrlPiece'
 
 -- | Value of hx_headers_ must be valid JSON
 hx_headers_ :: ToJSON a => a -> Attribute
@@ -87,10 +88,10 @@ hx_params_ val = case val of
     HXParamsValNone -> Base.hx_params_ "none"
 
 hx_patch_ :: Link -> Attribute
-hx_patch_ = Base.hx_patch_ . toUrlPiece
+hx_patch_ = Base.hx_patch_ . toUrlPiece'
 
 hx_post_ :: Link -> Attribute
-hx_post_ = Base.hx_post_ . toUrlPiece
+hx_post_ = Base.hx_post_ . toUrlPiece'
 
 -- For same reasons as hx_boost_
 hx_preserve_ :: Attribute
@@ -100,10 +101,10 @@ hx_prompt_ :: Text -> Attribute
 hx_prompt_ = Base.hx_prompt_
 
 hx_push_url_ :: Link -> Attribute
-hx_push_url_ = Base.hx_push_url_ . toUrlPiece
+hx_push_url_ = Base.hx_push_url_ . toUrlPiece'
 
 hx_put_ :: Link -> Attribute
-hx_put_ = Base.hx_put_ . toUrlPiece
+hx_put_ = Base.hx_put_ . toUrlPiece'
 
 hx_request_ :: HXRequestVal -> Attribute
 hx_request_ val = Base.hx_request_ $ case val of
@@ -118,9 +119,9 @@ hx_select_ = Base.hx_select_ . toCssSelector
 hx_sse_ :: HXSSEVal -> Attribute
 hx_sse_ val = Base.hx_sse_ $ case val of
     (HXSSEVal Nothing Nothing) -> ""
-    (HXSSEVal (Just link) Nothing) -> "connect:" <> (toUrlPiece link)
+    (HXSSEVal (Just link) Nothing) -> "connect:" <> (toUrlPiece' link)
     (HXSSEVal Nothing (Just eventName)) -> "swap:" <> eventName
-    (HXSSEVal (Just link) (Just eventName)) -> "connect:" <> (toUrlPiece link) <> " " <> "swap:" <> eventName
+    (HXSSEVal (Just link) (Just eventName)) -> "connect:" <> (toUrlPiece' link) <> " " <> "swap:" <> eventName
 
 pos :: SwapPos -> Text
 pos p = case p of
