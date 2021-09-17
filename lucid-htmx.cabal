@@ -41,13 +41,19 @@ library
     , base >=4.7 && <5
     , bytestring
     , containers
+    , contravariant-extras
     , css-selectors
+    , hasql
     , hasql-th
+    , hedis
     , lucid
+    , profunctors
     , servant
     , servant-lucid
     , servant-server
     , text
+    , tuple
+    , vector
     , warp
   default-language: Haskell2010
 
@@ -64,14 +70,20 @@ executable lucid-htmx-ex0-exe
     , base >=4.7 && <5
     , bytestring
     , containers
+    , contravariant-extras
     , css-selectors
+    , hasql
     , hasql-th
+    , hedis
     , lucid
     , lucid-htmx
+    , profunctors
     , servant
     , servant-lucid
     , servant-server
     , text
+    , tuple
+    , vector
     , warp
   default-language: Haskell2010
 
@@ -88,14 +100,20 @@ executable lucid-htmx-ex1-exe
     , base >=4.7 && <5
     , bytestring
     , containers
+    , contravariant-extras
     , css-selectors
+    , hasql
     , hasql-th
+    , hedis
     , lucid
     , lucid-htmx
+    , profunctors
     , servant
     , servant-lucid
     , servant-server
     , text
+    , tuple
+    , vector
     , warp
   default-language: Haskell2010
 
@@ -111,14 +129,20 @@ executable lucid-htmx-exe
     , base >=4.7 && <5
     , bytestring
     , containers
+    , contravariant-extras
     , css-selectors
+    , hasql
     , hasql-th
+    , hedis
     , lucid
     , lucid-htmx
+    , profunctors
     , servant
     , servant-lucid
     , servant-server
     , text
+    , tuple
+    , vector
     , warp
   default-language: Haskell2010
 
@@ -135,13 +159,19 @@ test-suite lucid-htmx-test
     , base >=4.7 && <5
     , bytestring
     , containers
+    , contravariant-extras
     , css-selectors
+    , hasql
     , hasql-th
+    , hedis
     , lucid
     , lucid-htmx
+    , profunctors
     , servant
     , servant-lucid
     , servant-server
     , text
+    , tuple
+    , vector
     , warp
   default-language: Haskell2010
