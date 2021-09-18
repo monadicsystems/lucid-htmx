@@ -3,6 +3,7 @@
 {-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE KindSignatures #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
@@ -93,7 +94,7 @@ type AddContact = ReqBody '[JSON] ContactForm :> Post '[HTML] Contact
 
 type EditContact = Capture "contact-id" (ID Contact) :> ReqBody '[JSON] ContactForm :> Post '[HTML] Contact
 
-type EditForm m = Capture "contact-id" (ID Contact) :> Get '[HTML] (HtmlT m ())
+type EditForm m = "edit" :> Capture "contact-id" (ID Contact) :> Get '[HTML] (HtmlT Identity ())
 
 type API m = 
     ContactTable
@@ -218,7 +219,7 @@ updateContactStatement =
             returning id :: int4, name :: text, email :: text, status :: text
         |]
     where
-        contactFormWithIDToTuple :: (ID Contact, ContactForm)-> (Int32, Text, Text, Text)
+        contactFormWithIDToTuple :: (ID Contact, ContactForm) -> (Int32, Text, Text, Text)
         contactFormWithIDToTuple (contactID, ContactForm{..}) =
             (unID contactID, unName contactFormName, unEmail contactFormEmail, Text.pack . show $ contactFormStatus)
 
@@ -281,11 +282,11 @@ editContactHandler conn contactID contactForm = do
     editedContact <- liftIO $ updateContactDB conn (contactID, contactForm)
     return editedContact
 
-editFormHandler :: Monad m => ID Contact -> Handler (HtmlT m ())
+editFormHandler :: ID Contact -> Handler (HtmlT Identity ())
 editFormHandler contactID = do
     pure $ editRow_ contactID
 
-server :: Monad m => Connection.Connection -> Server (API m)
+server :: Connection.Connection -> Server (API (Identity ()))
 server conn =
     contactTableHandler conn
     :<|> getContactHandler conn
@@ -309,11 +310,11 @@ addContactEndpoint = Proxy
 editContactEndpoint :: Proxy EditContact
 editContactEndpoint = Proxy
 
-editFormEndpoint :: Monad m => Proxy (EditForm m)
+editFormEndpoint :: Proxy (EditForm (Identity ()))
 editFormEndpoint = Proxy
 
-api :: Monad m => Proxy (API m)
-api = (Proxy :: Proxy (API Identity))
+api :: Proxy (API (Identity ()))
+api = Proxy
 
 getContactLink :: ID Contact -> Link
 getContactLink contactID = safeLink api getContactEndpoint $ contactID
@@ -393,8 +394,10 @@ inputRow_ = do
                 "Add"
 
 editRow_ :: Monad m => ID Contact -> HtmlT m ()
-editRow_ contactID = do
+editRow_ (ID contactID) = do
     let formID = "edit-contact-form-"<>(Text.pack . show $ contactID)
+
+    {-
     script_ $ "htmx.onLoad(function(target) {document.getElementById('" <> formID <> "').reset()});"
     form_
         [ id_ formID
@@ -404,6 +407,7 @@ editRow_ contactID = do
         , class_ " hidden "
         ]
         ""
+    -}
     tr_ [id_ $ "edit-contact-row-"<>(Text.pack . show $ contactID)] $ do
         td_ [tableCellStyle_ "green-300", class_ " text-semibold text-lg text-center "] $ toHtml (Text.pack . show $ contactID)
         td_ [tableCellStyle_ "green-300"] $ input_ [form_ formID, class_ "rounded-md px-2", type_ "text", name_ "contactFormName"]
@@ -430,8 +434,8 @@ editRow_ contactID = do
                         ]
         td_ [tableCellStyle_ "green-300"] $
             span_ [class_ "flex flex-row justify-center align-middle"] $ do
-                button_ [tableButtonStyle_ "green-500", class_ " mr-2 ", hx_post_ $ editContactLink contactID] "Save"
-                button_ [tableButtonStyle_ "red-500", hx_get_ $ getContactLink contactID] "Cancel"
+                button_ [tableButtonStyle_ "green-500", class_ " mr-2 ", hx_post_ $ editContactLink $ ID contactID] "Save"
+                button_ [tableButtonStyle_ "red-500", hx_get_ $ getContactLink $ ID contactID] "Cancel"
 
 instance ToHtml [Contact] where
     toHtml contacts = baseHtml "Contact Table" $ do
@@ -453,15 +457,10 @@ instance ToHtml [Contact] where
                         th_ [tableCellStyle_ "yellow-200", class_ " text-lg "] "Email"
                         th_ [tableCellStyle_ "yellow-200", class_ " text-lg "] "Status"
                         th_ [tableCellStyle_ "yellow-200", class_ " text-lg "] "Action(s)"
-                tbody_ 
-                    [ hx_confirm_ "Are you sure?"
-                    , hx_target_ (HXTargetValSelectorClosest [csssel|tr|])
-                    , hx_swap_ (HXSwapVal SwapPosOuter (Just $ SwapModDelay 1) Nothing Nothing)
-                    ]
-                    $ do
+                tbody_
+                    [hx_confirm_ "Are you sure?", hx_target_ (HXTargetValSelectorClosest [csssel|tr|]), hx_swap_ (HXSwapVal SwapPosOuter Nothing Nothing Nothing)] $ do
                         (Prelude.mapM_ toHtml contacts)
                         inputRow_
-
     toHtmlRaw = toHtml
 
 main :: IO ()
@@ -482,7 +481,7 @@ main = do
             insertContactsDB conn initialContacts
 
             let port = 8080
-                application = serve @(API Identity) Proxy $ server conn
+                application = serve @(API (Identity ())) Proxy $ server conn
             
             print $ "Serving application on port: " <> (show port)
             run port application
