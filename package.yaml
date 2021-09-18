@@ -23,9 +23,9 @@ dependencies:
 - aeson
 - base >= 4.7 && < 5
 - bytestring
-- containers
 - contravariant-extras
 - css-selectors
+- hashable
 - hasql
 - hasql-th
 - hedis
@@ -36,6 +36,7 @@ dependencies:
 - servant-server
 - text
 - tuple
+- unordered-containers
 - vector
 - warp
 

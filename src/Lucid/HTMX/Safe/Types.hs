@@ -11,9 +11,11 @@ module Lucid.HTMX.Safe.Types where
 import Css3.Selector (ToCssSelector(..))
 import qualified Data.Aeson as Aeson
 import Data.Aeson (ToJSON(..), Value(..), (.=))
-import Data.Set (Set)
+import Data.Hashable (Hashable)
+import Data.HashSet (HashSet)
 import qualified Data.Text as Text
 import Data.Text (Text)
+import GHC.Generics (Generic)
 import Servant.Links (Link)
 
 data HTMXExt =
@@ -30,9 +32,11 @@ data HTMXExt =
     | EventHeader
     | Preload
     | OtherHTMXExt Text
-    deriving (Eq, Show)
+    deriving (Eq, Show, Generic)
 
-data HXExtVal = HXExtVal (Set HTMXExt) | HXExtValIgnore (Set HTMXExt)
+instance Hashable HTMXExt where
+
+data HXExtVal = HXExtVal (HashSet HTMXExt) | HXExtValIgnore (HashSet HTMXExt)
     deriving (Eq, Show)
 
 data HXIndicatorVal where

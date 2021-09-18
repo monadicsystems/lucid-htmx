@@ -40,6 +40,7 @@ import Servant.Server
 
 import qualified Css3.Selector as Css3
 import qualified Data.Aeson as Aeson
+import qualified Data.HashSet as HashSet
 import qualified Data.Text as Text
 import qualified Data.Vector as Vector
 import qualified Hasql.Session as Session
@@ -143,7 +144,7 @@ insertContactsStatement =
         contactFormsUnzip =
             Vector.unzip3
             . fmap
-                (\ContactForm{..} -> 
+                (\ContactForm{..} ->
                     (unName contactFormName, unEmail contactFormEmail, Text.pack . show $ contactFormStatus)
                 )
             . Vector.fromList
@@ -255,7 +256,7 @@ instance ToHtml Contact where
 
 instance ToHtml [Contact] where
     toHtml contacts = baseHtml "Contact Table" $ do
-        form_ [hx_put_ addContactLink] ""
+        form_ [hx_ext_ (HXExtVal $ HashSet.fromList [JSONEnc]), hx_post_ addContactLink, hx_target_ (HXTargetValSelector [csssel|#edit-row|]), hx_swap_ (HXSwapVal SwapPosOuter Nothing Nothing Nothing)] ""
         div_ [class_ "flex items-center justify-center h-screen"] $ do
             table_ [class_ "table-auto rounded-lg"] $ do
                 thead_ [] $ do
@@ -272,7 +273,7 @@ instance ToHtml [Contact] where
                     ]
                     $ do
                         (Prelude.mapM_ toHtml contacts)
-                        tr_ [] $ do
+                        tr_ [id_ "edit-row"] $ do
                             td_ [tableCellStyle_ "green-300"] ""
                             td_ [tableCellStyle_ "green-300"] $ input_ [class_ "rounded-md px-2", type_ "text"]
                             td_ [tableCellStyle_ "green-300"] $ input_ [class_ "rounded-md px-2", type_ "text"]

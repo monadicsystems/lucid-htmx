@@ -11,7 +11,7 @@ module Lucid.HTMX.Safe.Attributes where
 import Css3.Selector (ToCssSelector(..))
 import qualified Data.Aeson as Aeson
 import Data.Aeson (ToJSON(..))
-import qualified Data.Set as Set
+import qualified Data.HashSet as HashSet
 import qualified Data.Text as Text
 import Data.Text (Text)
 import qualified Data.Text.Encoding as Text
@@ -59,8 +59,8 @@ getHTMXExtName htmxExt = case htmxExt of
 
 hx_ext_ :: HXExtVal -> Attribute
 hx_ext_ val = case val of
-    HXExtVal htmxExtSet -> Base.hx_ext_ . Text.intercalate "," . Prelude.map getHTMXExtName . Set.toList $ htmxExtSet
-    HXExtValIgnore htmxExtSet -> Base.hx_ext_ . ("ignore:" <>) . Text.intercalate "," . Prelude.map getHTMXExtName . Set.toList $ htmxExtSet
+    HXExtVal htmxExtHashSet -> Base.hx_ext_ . Text.intercalate "," . Prelude.map getHTMXExtName . HashSet.toList $ htmxExtHashSet
+    HXExtValIgnore htmxExtHashSet -> Base.hx_ext_ . ("ignore:" <>) . Text.intercalate "," . Prelude.map getHTMXExtName . HashSet.toList $ htmxExtHashSet
 
 hx_get_ :: Link -> Attribute
 hx_get_ = Base.hx_get_ . toUrlPiece'

@@ -40,9 +40,9 @@ library
       aeson
     , base >=4.7 && <5
     , bytestring
-    , containers
     , contravariant-extras
     , css-selectors
+    , hashable
     , hasql
     , hasql-th
     , hedis
@@ -53,6 +53,7 @@ library
     , servant-server
     , text
     , tuple
+    , unordered-containers
     , vector
     , warp
   default-language: Haskell2010
@@ -69,9 +70,9 @@ executable lucid-htmx-ex0-exe
       aeson
     , base >=4.7 && <5
     , bytestring
-    , containers
     , contravariant-extras
     , css-selectors
+    , hashable
     , hasql
     , hasql-th
     , hedis
@@ -83,6 +84,7 @@ executable lucid-htmx-ex0-exe
     , servant-server
     , text
     , tuple
+    , unordered-containers
     , vector
     , warp
   default-language: Haskell2010
@@ -99,9 +101,9 @@ executable lucid-htmx-ex1-exe
       aeson
     , base >=4.7 && <5
     , bytestring
-    , containers
     , contravariant-extras
     , css-selectors
+    , hashable
     , hasql
     , hasql-th
     , hedis
@@ -113,6 +115,7 @@ executable lucid-htmx-ex1-exe
     , servant-server
     , text
     , tuple
+    , unordered-containers
     , vector
     , warp
   default-language: Haskell2010
@@ -128,9 +131,9 @@ executable lucid-htmx-exe
       aeson
     , base >=4.7 && <5
     , bytestring
-    , containers
     , contravariant-extras
     , css-selectors
+    , hashable
     , hasql
     , hasql-th
     , hedis
@@ -142,6 +145,7 @@ executable lucid-htmx-exe
     , servant-server
     , text
     , tuple
+    , unordered-containers
     , vector
     , warp
   default-language: Haskell2010
@@ -158,9 +162,9 @@ test-suite lucid-htmx-test
       aeson
     , base >=4.7 && <5
     , bytestring
-    , containers
     , contravariant-extras
     , css-selectors
+    , hashable
     , hasql
     , hasql-th
     , hedis
@@ -172,6 +176,7 @@ test-suite lucid-htmx-test
     , servant-server
     , text
     , tuple
+    , unordered-containers
     , vector
     , warp
   default-language: Haskell2010

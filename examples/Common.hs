@@ -21,6 +21,7 @@ baseHtml title innerHtml = do
         title_ $ toHtml title
 
         link_ [href_ "https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css", rel_ "stylesheet"]
+        script_ [src_ "https://unpkg.com/htmx.org/dist/ext/json-enc.js"] blankHtml
         script_ [src_ "https://unpkg.com/htmx.org@1.5.0"] blankHtml
 
     body_ innerHtml
