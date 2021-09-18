@@ -17,6 +17,7 @@ import Common
 import Contravariant.Extras.Contrazip (contrazip3)
 import Control.Monad.IO.Class (liftIO)
 import Css3.Selector (csssel)
+import Data.Functor.Identity (Identity)
 import Data.Int
 import Data.Functor.Contravariant
 import Data.Profunctor
@@ -84,11 +85,23 @@ instance Aeson.FromJSON ContactForm where
 
 type ContactTable = Get '[HTML] [Contact]
 
+type GetContact = Capture "contact-id" (ID Contact) :> Get '[HTML] Contact
+
 type DeleteContact = Capture "contact-id" (ID Contact) :> Delete '[HTML] NoContent
 
 type AddContact = ReqBody '[JSON] ContactForm :> Post '[HTML] Contact
 
-type API = ContactTable :<|> DeleteContact :<|> AddContact
+type EditContact = Capture "contact-id" (ID Contact) :> ReqBody '[JSON] ContactForm :> Post '[HTML] Contact
+
+type EditForm m = Capture "contact-id" (ID Contact) :> Get '[HTML] (HtmlT m ())
+
+type API m = 
+    ContactTable
+    :<|> GetContact
+    :<|> DeleteContact
+    :<|> AddContact
+    :<|> EditContact
+    :<|> EditForm m
 
 dropContactsSession :: Session ()
 dropContactsSession = Session.sql
@@ -149,6 +162,25 @@ insertContactsStatement =
                 )
             . Vector.fromList
 
+getContactStatement :: Statement (ID Contact) Contact
+getContactStatement =
+    dimap
+        unID
+        tupleToContact
+        [singletonStatement|
+            select id :: int4, name :: text, email :: text, status :: text
+            from contacts
+            where id = $1 :: int4
+        |]
+    where
+        tupleToContact :: (Int32, Text, Text, Text) -> Contact
+        tupleToContact (id, name, email, status) = Contact
+            { contactID = ID id
+            , contactName = Name name
+            , contactEmail = Email email
+            , contactStatus = read . Text.unpack $ status
+            }
+
 getContactsStatement :: Statement () [Contact]
 getContactsStatement =
     dimap id (Vector.toList . fmap tupleToContact)
@@ -172,6 +204,32 @@ deleteContactStatement =
             delete from contacts where id = $1 :: int4
             |]
 
+updateContactStatement :: Statement (ID Contact, ContactForm) Contact
+updateContactStatement =
+    dimap
+        contactFormWithIDToTuple
+        tupleToContact
+        [singletonStatement|
+            update contacts
+            set name = $2 :: Text,
+                email = $3 :: Text,
+                status = $4 :: Text
+            where id = $1 :: int4
+            returning id :: int4, name :: text, email :: text, status :: text
+        |]
+    where
+        contactFormWithIDToTuple :: (ID Contact, ContactForm)-> (Int32, Text, Text, Text)
+        contactFormWithIDToTuple (contactID, ContactForm{..}) =
+            (unID contactID, unName contactFormName, unEmail contactFormEmail, Text.pack . show $ contactFormStatus)
+
+        tupleToContact :: (Int32, Text, Text, Text) -> Contact
+        tupleToContact (id, name, email, status) = Contact
+            { contactID = ID id
+            , contactName = Name name
+            , contactEmail = Email email
+            , contactStatus = read . Text.unpack $ status
+            }
+
 insertContactDB :: Connection.Connection -> ContactForm -> IO Contact
 insertContactDB conn contactForm = do
     Right res <- Session.run (Session.statement contactForm insertContactStatement) conn
@@ -180,6 +238,11 @@ insertContactDB conn contactForm = do
 insertContactsDB :: Connection.Connection -> [ContactForm] -> IO ()
 insertContactsDB conn contacts = do
     Right res <- Session.run (Session.statement contacts insertContactsStatement) conn
+    pure res
+
+getContactFromDB :: Connection.Connection -> ID Contact -> IO Contact
+getContactFromDB conn contactID = do
+    Right res <- Session.run (Session.statement contactID getContactStatement) conn
     pure res
 
 getContactsFromDB :: Connection.Connection -> IO [Contact]
@@ -192,8 +255,16 @@ deleteContactFromDB conn contactID = do
     Right res <- Session.run (Session.statement contactID deleteContactStatement) conn
     pure res
 
+updateContactDB :: Connection.Connection -> (ID Contact, ContactForm) -> IO Contact
+updateContactDB conn contactFormWithID = do
+    Right res <- Session.run (Session.statement contactFormWithID updateContactStatement) conn
+    pure res
+
 contactTableHandler :: Connection.Connection -> Handler [Contact]
 contactTableHandler conn = liftIO $ getContactsFromDB conn
+
+getContactHandler :: Connection.Connection -> ID Contact -> Handler Contact
+getContactHandler conn contactID = liftIO $ getContactFromDB conn contactID
 
 addContactHandler :: Connection.Connection -> ContactForm -> Handler Contact
 addContactHandler conn contactForm = do
@@ -205,11 +276,29 @@ deleteContactHandler conn contactID = do
   liftIO $ deleteContactFromDB conn contactID
   return NoContent
 
-server :: Connection.Connection -> Server API
-server conn = contactTableHandler conn :<|> deleteContactHandler conn :<|> addContactHandler conn
+editContactHandler :: Connection.Connection -> ID Contact -> ContactForm -> Handler Contact
+editContactHandler conn contactID contactForm = do
+    editedContact <- liftIO $ updateContactDB conn (contactID, contactForm)
+    return editedContact
+
+editFormHandler :: Monad m => ID Contact -> Handler (HtmlT m ())
+editFormHandler contactID = do
+    pure $ editRow_ contactID
+
+server :: Monad m => Connection.Connection -> Server (API m)
+server conn =
+    contactTableHandler conn
+    :<|> getContactHandler conn
+    :<|> deleteContactHandler conn 
+    :<|> addContactHandler conn
+    :<|> editContactHandler conn
+    :<|> editFormHandler
 
 contactTableEndpoint :: Proxy ContactTable
 contactTableEndpoint = Proxy
+
+getContactEndpoint :: Proxy GetContact
+getContactEndpoint = Proxy
 
 deleteContactEndpoint :: Proxy DeleteContact
 deleteContactEndpoint = Proxy
@@ -217,14 +306,29 @@ deleteContactEndpoint = Proxy
 addContactEndpoint :: Proxy AddContact
 addContactEndpoint = Proxy
 
-api :: Proxy API
-api = Proxy
+editContactEndpoint :: Proxy EditContact
+editContactEndpoint = Proxy
+
+editFormEndpoint :: Monad m => Proxy (EditForm m)
+editFormEndpoint = Proxy
+
+api :: Monad m => Proxy (API m)
+api = (Proxy :: Proxy (API Identity))
+
+getContactLink :: ID Contact -> Link
+getContactLink contactID = safeLink api getContactEndpoint $ contactID
 
 deleteContactLink :: ID Contact -> Link
 deleteContactLink contactID = safeLink api deleteContactEndpoint $ contactID
 
 addContactLink :: Link
 addContactLink = safeLink api addContactEndpoint
+
+editContactLink :: ID Contact -> Link
+editContactLink contactID = safeLink api editContactEndpoint $ contactID
+
+editFormLink :: ID Contact -> Link
+editFormLink contactID = safeLink api editFormEndpoint $ contactID
 
 instance ToHtml (ID Contact) where
     toHtml = toHtml . show . unID
@@ -250,7 +354,7 @@ instance ToHtml Contact where
             td_ [tableCellStyle_ "green-300", class_ " text-semibold text-lg text-center "] $ toHtml contactStatus
             td_ [tableCellStyle_ "green-300", class_ " text-semibold text-lg "] $ do
                 span_ [class_ "flex flex-row justify-center align-middle"] $ do
-                    button_ [tableButtonStyle_ "pink-400", class_ " mr-2 ", hx_delete_ $ deleteContactLink contactID] "Edit"
+                    button_ [tableButtonStyle_ "pink-400", class_ " mr-2 ", hx_get_ $ editFormLink contactID] "Edit"
                     button_ [tableButtonStyle_ "red-400", hx_delete_ $ deleteContactLink contactID] "Delete"
     toHtmlRaw = toHtml
 
@@ -288,6 +392,47 @@ inputRow_ = do
                 ]
                 "Add"
 
+editRow_ :: Monad m => ID Contact -> HtmlT m ()
+editRow_ contactID = do
+    let formID = "edit-contact-form-"<>(Text.pack . show $ contactID)
+    script_ $ "htmx.onLoad(function(target) {document.getElementById('" <> formID <> "').reset()});"
+    form_
+        [ id_ formID
+        , hx_ext_ (HXExtVal $ HashSet.fromList [JSONEnc])
+        , hx_post_ addContactLink, hx_target_ (let rowID = ("#edit-contact-row-"<>(Text.pack . show $ contactID)) in HXTargetValSelector [csssel|rowID|])
+        , hx_swap_ (HXSwapVal SwapPosOuter Nothing Nothing Nothing)
+        , class_ " hidden "
+        ]
+        ""
+    tr_ [id_ $ "edit-contact-row-"<>(Text.pack . show $ contactID)] $ do
+        td_ [tableCellStyle_ "green-300", class_ " text-semibold text-lg text-center "] $ toHtml (Text.pack . show $ contactID)
+        td_ [tableCellStyle_ "green-300"] $ input_ [form_ formID, class_ "rounded-md px-2", type_ "text", name_ "contactFormName"]
+        td_ [tableCellStyle_ "green-300"] $ input_ [form_ formID, class_ "rounded-md px-2", type_ "text", name_ "contactFormEmail"]
+        td_ [tableCellStyle_ "green-300"] $ do
+            span_ [class_ "flex flex-col justify-center align-middle"] $ do
+                label_ [] $ do
+                    "Active"
+                    input_
+                        [ form_ formID
+                        , type_ "radio"
+                        , name_ "contactFormStatus"
+                        , value_ . Text.pack . show $ Active
+                        , class_ " ml-2 "
+                        ]
+                label_ [] $ do
+                    "Inactive"
+                    input_
+                        [ form_ formID
+                        , type_ "radio"
+                        , name_ "contactFormStatus"
+                        , value_ . Text.pack . show $ Inactive
+                        , class_ " ml-2 "
+                        ]
+        td_ [tableCellStyle_ "green-300"] $
+            span_ [class_ "flex flex-row justify-center align-middle"] $ do
+                button_ [tableButtonStyle_ "green-500", class_ " mr-2 ", hx_post_ $ editContactLink contactID] "Save"
+                button_ [tableButtonStyle_ "red-500", hx_get_ $ getContactLink contactID] "Cancel"
+
 instance ToHtml [Contact] where
     toHtml contacts = baseHtml "Contact Table" $ do
         script_ "htmx.onLoad(function(target) {document.getElementById('add-contact-form').reset()});"
@@ -298,6 +443,7 @@ instance ToHtml [Contact] where
             , hx_swap_ (HXSwapVal SwapPosBeforeBegin Nothing Nothing Nothing)
             ]
             ""
+
         div_ [class_ "flex items-center justify-center h-screen"] $ do
             table_ [class_ "table-auto rounded-lg"] $ do
                 thead_ [] $ do
@@ -336,7 +482,7 @@ main = do
             insertContactsDB conn initialContacts
 
             let port = 8080
-                application = serve @API Proxy $ server conn
+                application = serve @(API Identity) Proxy $ server conn
             
             print $ "Serving application on port: " <> (show port)
             run port application
