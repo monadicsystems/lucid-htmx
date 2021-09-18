@@ -48,13 +48,21 @@ import qualified Hasql.Encoders as Encoders
 import qualified Hasql.Connection as Connection
 
 
-newtype ID a = ID { unID :: Int32 } deriving (Eq, Show, FromHttpApiData, ToHttpApiData)
+newtype ID a = ID { unID :: Int32 }
+    deriving (Eq, Show, FromHttpApiData, ToHttpApiData)
+    deriving newtype (Aeson.FromJSON)
 
-newtype Email = Email { unEmail :: Text } deriving (Eq, Show, ToHtml)
+newtype Email = Email { unEmail :: Text }
+    deriving (Eq, Show, ToHtml)
+    deriving newtype (Aeson.FromJSON)
 
-newtype Name = Name { unName :: Text } deriving (Eq, Show, ToHtml)
+newtype Name = Name { unName :: Text }
+    deriving (Eq, Show, ToHtml)
+    deriving newtype (Aeson.FromJSON)
 
-data Status = Active | Inactive deriving (Eq, Show, Read)
+data Status = Active | Inactive deriving (Eq, Show, Read, Generic)
+
+instance Aeson.FromJSON Status where
 
 data Contact = Contact
     { contactID :: ID Contact
@@ -69,15 +77,17 @@ data ContactForm = ContactForm
     , contactFormEmail :: Email
     , contactFormStatus :: Status
     }
-    deriving (Eq, Show)
+    deriving (Eq, Generic, Show)
+
+instance Aeson.FromJSON ContactForm where
 
 type ContactTable = Get '[HTML] [Contact]
 
 type DeleteContact = Capture "contact-id" (ID Contact) :> Delete '[HTML] NoContent
 
--- type AddContact = ...
+type AddContact = ReqBody '[JSON] ContactForm :> Put '[HTML] Contact
 
-type API = ContactTable :<|> DeleteContact
+type API = ContactTable :<|> DeleteContact :<|> AddContact
 
 dropContactsSession :: Session ()
 dropContactsSession = Session.sql
@@ -96,6 +106,28 @@ createContactsSession = Session.sql
         );
         |]
     -- TODO: created_on TIMESTAMP NOT NULL
+
+insertContactStatement :: Statement ContactForm Contact
+insertContactStatement =
+    dimap
+        contactFormToTuple
+        tupleToContact
+        [singletonStatement|
+            insert into contacts (name, email, status)
+            values ($1 :: text, $2 :: text, $3 :: text)
+            returning id :: int4, name :: text, email :: text, status :: text
+        |]
+    where
+        contactFormToTuple :: ContactForm -> (Text, Text, Text)
+        contactFormToTuple ContactForm{..} = (unName contactFormName, unEmail contactFormEmail, Text.pack . show $ contactFormStatus)
+
+        tupleToContact :: (Int32, Text, Text, Text) -> Contact
+        tupleToContact (id, name, email, status) = Contact
+            { contactID = ID id
+            , contactName = Name name
+            , contactEmail = Email email
+            , contactStatus = read . Text.unpack $ status
+            }
 
 insertContactsStatement :: Statement [ContactForm] ()
 insertContactsStatement =
@@ -121,7 +153,7 @@ getContactsStatement =
     dimap id (Vector.toList . fmap tupleToContact)
         [vectorStatement|
             select id :: int4, name :: text, email :: text, status :: text
-            from "contacts"
+            from contacts
             |]
     where
         tupleToContact :: (Int32, Text, Text, Text) -> Contact
@@ -138,6 +170,11 @@ deleteContactStatement =
         [resultlessStatement| 
             delete from contacts where id = $1 :: int4
             |]
+
+insertContactDB :: Connection.Connection -> ContactForm -> IO Contact
+insertContactDB conn contactForm = do
+    Right res <- Session.run (Session.statement contactForm insertContactStatement) conn
+    pure res
 
 insertContactsDB :: Connection.Connection -> [ContactForm] -> IO ()
 insertContactsDB conn contacts = do
@@ -157,13 +194,18 @@ deleteContactFromDB conn contactID = do
 contactTableHandler :: Connection.Connection -> Handler [Contact]
 contactTableHandler conn = liftIO $ getContactsFromDB conn
 
+addContactHandler :: Connection.Connection -> ContactForm -> Handler Contact
+addContactHandler conn contactForm = do
+    newContact <- liftIO $ insertContactDB conn contactForm
+    pure newContact
+
 deleteContactHandler :: Connection.Connection -> ID Contact -> Handler NoContent
 deleteContactHandler conn contactID = do
   liftIO $ deleteContactFromDB conn contactID
   return NoContent
 
 server :: Connection.Connection -> Server API
-server conn = contactTableHandler conn :<|> deleteContactHandler conn
+server conn = contactTableHandler conn :<|> deleteContactHandler conn :<|> addContactHandler conn
 
 contactTableEndpoint :: Proxy ContactTable
 contactTableEndpoint = Proxy
@@ -171,11 +213,17 @@ contactTableEndpoint = Proxy
 deleteContactEndpoint :: Proxy DeleteContact
 deleteContactEndpoint = Proxy
 
+addContactEndpoint :: Proxy AddContact
+addContactEndpoint = Proxy
+
 api :: Proxy API
 api = Proxy
 
 deleteContactLink :: ID Contact -> Link
 deleteContactLink contactID = safeLink api deleteContactEndpoint $ contactID
+
+addContactLink :: Link
+addContactLink = safeLink api addContactEndpoint
 
 instance ToHtml (ID Contact) where
     toHtml = toHtml . show . unID
@@ -195,10 +243,10 @@ tableButtonStyle_ color =
 instance ToHtml Contact where
     toHtml Contact{..} = do
         tr_ [] $ do
-            td_ [tableCellStyle_ "green-300", class_ " text-semibold text-lg "] $ toHtml contactID
+            td_ [tableCellStyle_ "green-300", class_ " text-semibold text-lg text-center "] $ toHtml contactID
             td_ [tableCellStyle_ "green-300", class_ " text-semibold text-lg "] $ toHtml contactName
             td_ [tableCellStyle_ "green-300", class_ " text-semibold text-lg "] $ toHtml contactEmail
-            td_ [tableCellStyle_ "green-300", class_ " text-semibold text-lg "] $ toHtml contactStatus
+            td_ [tableCellStyle_ "green-300", class_ " text-semibold text-lg text-center "] $ toHtml contactStatus
             td_ [tableCellStyle_ "green-300", class_ " text-semibold text-lg "] $ do
                 span_ [class_ "flex flex-row justify-center align-middle"] $ do
                     button_ [tableButtonStyle_ "pink-400", class_ " mr-2 ", hx_delete_ $ deleteContactLink contactID] "Edit"
@@ -207,6 +255,7 @@ instance ToHtml Contact where
 
 instance ToHtml [Contact] where
     toHtml contacts = baseHtml "Contact Table" $ do
+        form_ [hx_put_ addContactLink] ""
         div_ [class_ "flex items-center justify-center h-screen"] $ do
             table_ [class_ "table-auto rounded-lg"] $ do
                 thead_ [] $ do
@@ -230,7 +279,8 @@ instance ToHtml [Contact] where
                             td_ [tableCellStyle_ "green-300"] $ do
                                 span_ [class_ "flex flex-row justify-center align-middle"] $ do
                                     p_ [class_ "mr-2 text-lg"] "Active?"
-                                    input_ [class_ "rounded-md my-auto h-4 w-6", type_ "checkbox"]
+                                    input_ [type_ "hidden", value_ . Text.pack . show $ Inactive]
+                                    input_ [class_ "rounded-md my-auto h-4 w-6", type_ "checkbox", value_ . Text.pack . show $ Active]
                             td_ [tableCellStyle_ "green-300"] $
                                 button_
                                     [ tableButtonStyle_ "purple-400"
