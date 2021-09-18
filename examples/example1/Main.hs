@@ -86,7 +86,7 @@ type ContactTable = Get '[HTML] [Contact]
 
 type DeleteContact = Capture "contact-id" (ID Contact) :> Delete '[HTML] NoContent
 
-type AddContact = ReqBody '[JSON] ContactForm :> Put '[HTML] Contact
+type AddContact = ReqBody '[JSON] ContactForm :> Post '[HTML] Contact
 
 type API = ContactTable :<|> DeleteContact :<|> AddContact
 
@@ -254,9 +254,50 @@ instance ToHtml Contact where
                     button_ [tableButtonStyle_ "red-400", hx_delete_ $ deleteContactLink contactID] "Delete"
     toHtmlRaw = toHtml
 
+inputRow_ :: Monad m => HtmlT m ()
+inputRow_ = do
+    tr_ [id_ "add-contact-row"] $ do
+        td_ [tableCellStyle_ "green-300"] ""
+        td_ [tableCellStyle_ "green-300"] $ input_ [form_ "add-contact-form", class_ "rounded-md px-2", type_ "text", name_ "contactFormName"]
+        td_ [tableCellStyle_ "green-300"] $ input_ [form_ "add-contact-form", class_ "rounded-md px-2", type_ "text", name_ "contactFormEmail"]
+        td_ [tableCellStyle_ "green-300"] $ do
+            span_ [class_ "flex flex-col justify-center align-middle"] $ do
+                label_ [] $ do
+                    "Active"
+                    input_
+                        [ form_ "add-contact-form"
+                        , type_ "radio"
+                        , name_ "contactFormStatus"
+                        , value_ . Text.pack . show $ Active
+                        , class_ " ml-2 "
+                        ]
+                label_ [] $ do
+                    "Inactive"
+                    input_
+                        [ form_ "add-contact-form"
+                        , type_ "radio"
+                        , name_ "contactFormStatus"
+                        , value_ . Text.pack . show $ Inactive
+                        , class_ " ml-2 "
+                        ]
+        td_ [tableCellStyle_ "green-300"] $
+            button_
+                [ form_ "add-contact-form"
+                , tableButtonStyle_ "purple-400"
+                , class_ " w-full "
+                ]
+                "Add"
+
 instance ToHtml [Contact] where
     toHtml contacts = baseHtml "Contact Table" $ do
-        form_ [hx_ext_ (HXExtVal $ HashSet.fromList [JSONEnc]), hx_post_ addContactLink, hx_target_ (HXTargetValSelector [csssel|#edit-row|]), hx_swap_ (HXSwapVal SwapPosOuter Nothing Nothing Nothing)] ""
+        script_ "htmx.onLoad(function(target) {document.getElementById('add-contact-form').reset()});"
+        form_
+            [ id_ "add-contact-form"
+            , hx_ext_ (HXExtVal $ HashSet.fromList [JSONEnc])
+            , hx_post_ addContactLink, hx_target_ (HXTargetValSelector [csssel|#add-contact-row|])
+            , hx_swap_ (HXSwapVal SwapPosBeforeBegin Nothing Nothing Nothing)
+            ]
+            ""
         div_ [class_ "flex items-center justify-center h-screen"] $ do
             table_ [class_ "table-auto rounded-lg"] $ do
                 thead_ [] $ do
@@ -269,26 +310,11 @@ instance ToHtml [Contact] where
                 tbody_ 
                     [ hx_confirm_ "Are you sure?"
                     , hx_target_ (HXTargetValSelectorClosest [csssel|tr|])
-                    , hx_swap_ (HXSwapVal SwapPosOuter (Just $ SwapModDelay 2) Nothing Nothing)
+                    , hx_swap_ (HXSwapVal SwapPosOuter (Just $ SwapModDelay 1) Nothing Nothing)
                     ]
                     $ do
                         (Prelude.mapM_ toHtml contacts)
-                        tr_ [id_ "edit-row"] $ do
-                            td_ [tableCellStyle_ "green-300"] ""
-                            td_ [tableCellStyle_ "green-300"] $ input_ [class_ "rounded-md px-2", type_ "text"]
-                            td_ [tableCellStyle_ "green-300"] $ input_ [class_ "rounded-md px-2", type_ "text"]
-                            td_ [tableCellStyle_ "green-300"] $ do
-                                span_ [class_ "flex flex-row justify-center align-middle"] $ do
-                                    p_ [class_ "mr-2 text-lg"] "Active?"
-                                    input_ [type_ "hidden", value_ . Text.pack . show $ Inactive]
-                                    input_ [class_ "rounded-md my-auto h-4 w-6", type_ "checkbox", value_ . Text.pack . show $ Active]
-                            td_ [tableCellStyle_ "green-300"] $
-                                button_
-                                    [ tableButtonStyle_ "purple-400"
-                                    , class_ " w-full "
-                                    -- , hx_delete_ $ deleteContactLink contactID
-                                    ]
-                                    "Add"
+                        inputRow_
 
     toHtmlRaw = toHtml
 
