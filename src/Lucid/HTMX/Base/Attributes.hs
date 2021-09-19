@@ -43,7 +43,7 @@ hx_history_elt_ = makeAttribute "hx-history-elt" mempty
 
 -- | <https://htmx.org/attributes/hx-include/>
 hx_include_ :: Text -> Attribute
-hx_include_ = makeAttribute "hx_include"
+hx_include_ = makeAttribute "hx-include"
 
 -- | <https://htmx.org/attributes/hx-indicator/>
 hx_indicator_ :: Text -> Attribute
