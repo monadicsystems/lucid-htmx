@@ -398,12 +398,12 @@ editRow_ (ID contactID) = do
     let formID = "edit-contact-form-"<>(Text.pack . show $ contactID)
 
     {-
-    script_ $ "htmx.onLoad(function(target) {document.getElementById('" <> formID <> "').reset()});"
+    script_ []
     form_
         [ id_ formID
         , hx_ext_ (HXExtVal $ HashSet.fromList [JSONEnc])
         , hx_post_ addContactLink, hx_target_ (let rowID = ("#edit-contact-row-"<>(Text.pack . show $ contactID)) in HXTargetValSelector [csssel|rowID|])
-        , hx_swap_ (HXSwapVal SwapPosOuter Nothing Nothing Nothing)
+        , hx_swap_oob_ (HXSwapOOBVal (HXSwapVal SwapPosOuter Nothing Nothing Nothing)
         , class_ " hidden "
         ]
         ""
@@ -439,7 +439,8 @@ editRow_ (ID contactID) = do
 
 instance ToHtml [Contact] where
     toHtml contacts = baseHtml "Contact Table" $ do
-        script_ "htmx.onLoad(function(target) {document.getElementById('add-contact-form').reset()});"
+        {-
+        script_ "htmx.onLoad(function(target) {document.getElementById('add-contact-form')});"
         form_
             [ id_ "add-contact-form"
             , hx_ext_ (HXExtVal $ HashSet.fromList [JSONEnc])
@@ -447,6 +448,8 @@ instance ToHtml [Contact] where
             , hx_swap_ (HXSwapVal SwapPosBeforeBegin Nothing Nothing Nothing)
             ]
             ""
+        -}
+        -- div_ [id_ "edit-form-container", class_ "hidden"] ""
 
         div_ [class_ "flex items-center justify-center h-screen"] $ do
             table_ [class_ "table-auto rounded-lg"] $ do
