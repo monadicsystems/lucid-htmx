@@ -32,8 +32,8 @@ import Hasql.TH
 import Hasql.Session (Session)
 import Hasql.Statement (Statement(..))
 import Lucid
-import Lucid.HTMX.Base (hx_target_)
-import Lucid.HTMX.Safe hiding (hx_target_)
+import Lucid.HTMX.Base (hx_include_, hx_target_)
+import Lucid.HTMX.Safe hiding (hx_include_, hx_target_)
 import Network.Wai.Handler.Warp
 import Prelude
 import Servant.API
@@ -93,17 +93,17 @@ type DeleteContact = Capture "contact-id" (ID Contact) :> Delete '[HTML] NoConte
 
 type AddContact = ReqBody '[JSON] ContactForm :> Post '[HTML] Contact
 
-type EditContact = Capture "contact-id" (ID Contact) :> ReqBody '[JSON] ContactForm :> Post '[HTML] Contact
-
 type EditForm m = "edit" :> Capture "contact-id" (ID Contact) :> Get '[HTML] (HtmlT Identity ())
+
+type EditContact = "edit" :> Capture "contact-id" (ID Contact) :> ReqBody '[JSON] ContactForm :> Post '[HTML] Contact
 
 type API m = 
     ContactTable
     :<|> GetContact
     :<|> DeleteContact
     :<|> AddContact
-    :<|> EditContact
     :<|> EditForm m
+    :<|> EditContact
 
 dropContactsSession :: Session ()
 dropContactsSession = Session.sql
@@ -283,9 +283,10 @@ editContactHandler conn contactID contactForm = do
     editedContact <- liftIO $ updateContactDB conn (contactID, contactForm)
     return editedContact
 
-editFormHandler :: ID Contact -> Handler (HtmlT Identity ())
-editFormHandler contactID = do
-    pure $ editRow_ contactID
+editFormHandler :: Connection.Connection -> ID Contact -> Handler (HtmlT Identity ())
+editFormHandler conn contactID = do
+    contact <- liftIO $ getContactFromDB conn contactID
+    pure $ editRow_ contact
 
 server :: Connection.Connection -> Server (API (Identity ()))
 server conn =
@@ -293,8 +294,8 @@ server conn =
     :<|> getContactHandler conn
     :<|> deleteContactHandler conn 
     :<|> addContactHandler conn
+    :<|> editFormHandler conn
     :<|> editContactHandler conn
-    :<|> editFormHandler
 
 contactTableEndpoint :: Proxy ContactTable
 contactTableEndpoint = Proxy
@@ -342,7 +343,8 @@ instance ToHtml Status where
         Inactive -> "Inactive"
     toHtmlRaw = toHtml
 
-tableCellStyle_ color = class_ $ "border-4 border-blue-400 items-center justify-center px-4 py-2 bg-"<>color
+tableCellStyle_ color =
+    class_ $ "border-4 border-blue-400 items-center justify-center px-4 py-2 bg-"<>color
 
 tableButtonStyle_ color =
     classes_ ["px-4", "py-2", "bg-red-500", "text-lg", "text-white", "rounded-md", "bg-"<>color]
@@ -357,7 +359,7 @@ instance ToHtml Contact where
             td_ [tableCellStyle_ "green-300", class_ " text-semibold text-lg text-center "] $ toHtml contactStatus
             td_ [tableCellStyle_ "green-300", class_ " text-semibold text-lg "] $ do
                 span_ [class_ "flex flex-row justify-center align-middle"] $ do
-                    button_ 
+                    button_
                         [ tableButtonStyle_ "pink-400"
                         , class_ " mr-2 "
                         , hx_get_ $ editFormLink contactID
@@ -381,23 +383,24 @@ inputRow_ = do
         td_ [tableCellStyle_ "green-300"] $ input_ [class_ "rounded-md px-2 add-contact-form-input", type_ "text", name_ "contactFormName"]
         td_ [tableCellStyle_ "green-300"] $ input_ [class_ "rounded-md px-2 add-contact-form-input", type_ "text", name_ "contactFormEmail"]
         td_ [tableCellStyle_ "green-300"] $ do
-            span_ [class_ "flex flex-col justify-center align-middle"] $ do
-                label_ [] $ do
-                    "Active"
-                    input_
-                        [ type_ "radio"
-                        , name_ "contactFormStatus"
-                        , value_ . Text.pack . show $ Active
-                        , class_ " ml-2 add-contact-form-input "
-                        ]
-                label_ [] $ do
-                    "Inactive"
-                    input_
-                        [ type_ "radio"
-                        , name_ "contactFormStatus"
-                        , value_ . Text.pack . show $ Inactive
-                        , class_ " ml-2 add-contact-form-input "
-                        ]
+            form_ $ do
+                span_ [class_ "flex flex-col justify-center align-middle"] $ do
+                    label_ [] $ do
+                        "Active"
+                        input_
+                            [ type_ "radio"
+                            , name_ "contactFormStatus"
+                            , value_ . Text.pack . show $ Active
+                            , class_ " ml-2 add-contact-form-input "
+                            ]
+                    label_ [] $ do
+                        "Inactive"
+                        input_
+                            [ type_ "radio"
+                            , name_ "contactFormStatus"
+                            , value_ . Text.pack . show $ Inactive
+                            , class_ " ml-2 add-contact-form-input "
+                            ]
         td_ [tableCellStyle_ "green-300"] $
             button_
                 [ tableButtonStyle_ "purple-400"
@@ -405,52 +408,56 @@ inputRow_ = do
                 , hx_ext_ (HXExtVal $ HashSet.fromList [JSONEnc])
                 , hx_post_ addContactLink
                 , hx_target_ "#add-contact-row"
-                , hx_swap_ (HXSwapVal SwapPosOuter Nothing Nothing Nothing)
-                , hx_include_ [csssel|.add-contact-form-input|]
+                , hx_swap_ (HXSwapVal SwapPosBeforeBegin Nothing Nothing Nothing)
+                , hx_include_ ".add-contact-form-input"
                 ]
                 "Add"
 
-editRow_ :: Monad m => ID Contact -> HtmlT m ()
-editRow_ (ID contactID) = do
-    let rowID = "edit-contact-row-"<>(Text.pack . show $ contactID)
-        inputClass = "edit-contact-form-" <> (Text.pack . show $ contactID) <> "-input"
+editRow_ :: Monad m => Contact -> HtmlT m ()
+editRow_ Contact{..} = do
+    let rowID = "edit-contact-row-"<>(Text.pack . show . unID $ contactID)
+        inputClass = "edit-contact-form-" <> (Text.pack . show . unID $ contactID) <> "-input"
 
     tr_ [id_ rowID] $ do
-        td_ [tableCellStyle_ "green-300", class_ " text-semibold text-lg text-center "] $ toHtml (Text.pack . show $ contactID)
-        td_ [tableCellStyle_ "green-300"] $ input_ [class_ $ "rounded-md px-2 " <> inputClass, type_ "text", name_ "contactFormName"]
-        td_ [tableCellStyle_ "green-300"] $ input_ [class_ $ "rounded-md px-2 " <> inputClass, type_ "text", name_ "contactFormEmail"]
+        td_ [tableCellStyle_ "green-300", class_ " text-semibold text-lg text-center "] $ toHtml (Text.pack . show . unID $ contactID)
+        td_ [tableCellStyle_ "green-300"] $ input_ [class_ $ "rounded-md px-2 " <> inputClass, type_ "text", name_ "contactFormName", value_ $ unName contactName]
+        td_ [tableCellStyle_ "green-300"] $ input_ [class_ $ "rounded-md px-2 " <> inputClass, type_ "text", name_ "contactFormEmail", value_ $ unEmail contactEmail]
         td_ [tableCellStyle_ "green-300"] $ do
-            span_ [class_ "flex flex-col justify-center align-middle"] $ do
-                label_ [] $ do
-                    "Active"
-                    input_
-                        [ type_ "radio"
-                        , name_ "contactFormStatus"
-                        , value_ . Text.pack . show $ Active
-                        , class_ $ " ml-2 " <> inputClass
-                        ]
-                label_ [] $ do
-                    "Inactive"
-                    input_
-                        [ type_ "radio"
-                        , name_ "contactFormStatus"
-                        , value_ . Text.pack . show $ Inactive
-                        , class_ $ " ml-2 " <> inputClass
-                        ]
+            form_ $ do
+                span_ [class_ "flex flex-col justify-center align-middle"] $ do
+                    label_ [] $ do
+                        "Active"
+                        input_
+                            [ type_ "radio"
+                            , name_ "contactFormStatus"
+                            , value_ . Text.pack . show $ Active
+                            , class_ $ " ml-2 " <> inputClass
+                            , if (show contactStatus) == "Active" then checked_ else (class_ "")
+                            ]
+                    label_ [] $ do
+                        "Inactive"
+                        input_
+                            [ type_ "radio"
+                            , name_ "contactFormStatus"
+                            , value_ . Text.pack . show $ Inactive
+                            , class_ $ " ml-2 " <> inputClass
+                            , if (show contactStatus) == "Inactive" then checked_ else (class_ "")
+                            ]
         td_ [tableCellStyle_ "green-300"] $
             span_ [class_ "flex flex-row justify-center align-middle"] $ do
                 button_
                     [ tableButtonStyle_ "green-500"
                     , class_ " mr-2 "
-                    , hx_post_ $ editContactLink $ ID contactID
+                    , hx_ext_ (HXExtVal $ HashSet.fromList [JSONEnc])
+                    , hx_post_ $ editContactLink contactID
                     , hx_target_ $ "#"<>rowID
                     , hx_swap_ (HXSwapVal SwapPosOuter Nothing Nothing Nothing)
-                    , hx_include_ [csssel|.add-contact-form-input|]
+                    , hx_include_ $ "."<>inputClass
                     ]
                     "Save"
                 button_
                     [ tableButtonStyle_ "red-500"
-                    , hx_get_ $ getContactLink $ ID contactID
+                    , hx_get_ $ getContactLink contactID
                     , hx_target_ $ "#"<>rowID
                     , hx_swap_ (HXSwapVal SwapPosOuter Nothing Nothing Nothing)
                     ]
@@ -458,6 +465,7 @@ editRow_ (ID contactID) = do
 
 instance ToHtml [Contact] where
     toHtml contacts = baseHtml "Contact Table" $ do
+        script_ "document.body.addEventListener('htmx:beforeSwap',function(e){'add-contact-row'===e.detail.target.id&&Array.from(document.getElementsByClassName('add-contact-form-input')).map(e=>{e.value&&(e.value=e.defaultValue),e.checked&&(e.checked=e.defaultChecked)})});"
         div_ [class_ "flex items-center justify-center h-screen"] $ do
             table_ [class_ "table-auto rounded-lg"] $ do
                 thead_ [] $ do
