@@ -83,7 +83,7 @@ newtype Tag = Tag { unTag :: Text }
 
 data Animal =
     Elephant
-    -- An elephant whose account is older than 2 months is immune to downvotes
+    -- An elephant whose account is older than 6 months is immune to downvotes
     | Lion
     -- A lion can downvote a post/tweet up to three times
     | Zebra
@@ -120,9 +120,19 @@ data AuthorizedUser = AuthorizedUser
     }
     deriving stock (Eq, Show)
 
+data NewCreet = NewCreet
+    { newCreetUserID :: ID AuthorizedUser
+    , newCreetParentID :: Maybe (ID Creet)
+    , newCreetTimestamp :: UTCTime
+    , newCreetContent :: Text
+    , newCreetTags :: [Tag]
+    }
+    deriving stock (Eq, Show)
+
 -- | Analogous to a tweet
 data Creet = Creet
-    { creetTimestamp :: UTCTime
+    { creetID :: ID Creet
+    , creetTimestamp :: UTCTime
     , creetUserName :: Name
     , creetContent :: Text
     , creetRoars :: Int
