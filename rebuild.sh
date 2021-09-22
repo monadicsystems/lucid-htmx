@@ -7,4 +7,4 @@ else
     fuser -k -n tcp $1
 fi
 
-stack build --fast && stack exec lucid-htmx-ex1-exe
+stack build --fast && stack exec critter-exe
