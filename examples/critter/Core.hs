@@ -52,25 +52,22 @@ import qualified Hasql.Decoders as Decoders
 import qualified Hasql.Encoders as Encoders
 import qualified Hasql.Connection as Connection
 
+
 newtype ID a = ID { unID :: Int32 }
     deriving stock (Eq)
     deriving newtype (Show)
 
-newtype Name = Name { unName :: Text }
+newtype Secret = Secret { unSecret :: Text }
     deriving stock (Eq)
     deriving newtype (Show)
 
-newtype Email = Email { unEmail :: Text }
-    deriving stock (Eq)
-    deriving newtype (Show)
-
-newtype Password = Password { unPassword :: Text }
-    deriving stock (Eq)
-    deriving newtype (Show)
+-- newtype Password = Password { unPassword :: Text }
+--     deriving stock (Eq)
+--     deriving newtype (Show)
 
 data UserAuth = UserAuth
-    { userAuthEmail :: Email
-    , userAuthPassword :: Password
+    { userAuthSecret1 :: Secret
+    , userAuthSecret2 :: Secret
     }
     deriving stock (Eq, Show)
 
@@ -78,14 +75,11 @@ newtype Tag = Tag { unTag :: Text }
     deriving stock (Eq)
     deriving newtype (Show)
 
--- Food instead of karma. If an animal reaches 0 food, they die
--- An animal consumes food according to size
-
 data Animal =
     Elephant
-    -- An elephant whose account is older than 6 months is immune to downvotes
+    -- An elephant whose account is older than 6 months is immune to downvotes, except by lions
     | Lion
-    -- A lion can downvote a post/tweet up to three times
+    -- A lion can downvote/upvote a post/tweet up to two times, and downvote elephants post's/tweets once
     | Zebra
     -- A zebra has the ability to delete their posts/tweets
     | Chameleon
@@ -96,24 +90,22 @@ data Animal =
     -- Can see a zebra's deleted comments, a chameleon's edits, and a parrot through disguise
     | Scorpion
     -- If a scorpion replies to a comment and gets more votes than the post they reply to,
-    -- the original comment/post poster is banned for 3 days. Doesn't work on other scorpions
+    -- the original comment/post poster is banned for 24 hours. Doesn't work on other scorpions
     deriving stock (Eq, Show)
 
 data NewUser = NewUser
-    { userName :: Name
-    , userEmail :: Email
-    , userPassword :: Password
-    , userConfirmPassword :: Password
-    , userIntro :: Text
-    , userTags :: [Tag]
-    , userAnimal :: Animal
+    { newUserSecret1 :: Secret
+    , newUserSecret1Confirm :: Secret
+    , newUserSecret2 :: Secret
+    , newUserSecret2Confirm :: Secret
+    , newUserIntro :: Text
+    , newUserTags :: [Tag]
+    , newUserAnimal :: Animal
     }
     deriving stock (Eq, Show)
 
 data AuthorizedUser = AuthorizedUser
     { authorizedUserID :: ID AuthorizedUser
-    , authorizedUserName :: Name
-    , authorizedUserEmail :: Email
     , authorizedUserIntro :: Text
     , authorizedUserTags :: [Tag]
     , authorizedUserAnimal :: Animal
@@ -132,12 +124,13 @@ data NewCreet = NewCreet
 -- | Analogous to a tweet
 data Creet = Creet
     { creetID :: ID Creet
+    , creetUserID :: ID AuthorizedUser
+    , creetParentID :: Maybe (ID Creet)
     , creetTimestamp :: UTCTime
-    , creetUserName :: Name
     , creetContent :: Text
     , creetRoars :: Int
     , creetShits :: Int
     , creetTags :: [Tag]
-    , creetChildren :: [Creet]
+    , creetChildren :: [Creet] -- IDs
     }
     deriving stock (Eq, Show)
