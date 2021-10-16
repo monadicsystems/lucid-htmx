@@ -32,7 +32,7 @@ import Hasql.TH
 import Hasql.Session (Session)
 import Hasql.Statement (Statement(..))
 import Lucid
-import Lucid.HTMX.Base (hx_include_, hx_target_)
+import Lucid.HTMX (hx_include_, hx_target_)
 import Lucid.HTMX.Safe hiding (hx_include_, hx_target_)
 import Network.Wai.Handler.Warp
 import Prelude

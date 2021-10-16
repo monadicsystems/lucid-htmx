@@ -17,7 +17,7 @@ import Data.Text (Text)
 import qualified Data.Text.Encoding as Text
 import qualified Data.ByteString.Lazy as LBS
 import Lucid.Base (Attribute)
-import qualified Lucid.HTMX.Base as Base
+import qualified Lucid.HTMX as Base
 import Lucid.HTMX.Safe.Types
 import Servant.API (ToHttpApiData(..))
 import Servant.Links (Link)

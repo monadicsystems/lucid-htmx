@@ -32,6 +32,7 @@ dependencies:
 - lucid
 - profunctors
 - servant
+- servant-auth
 - servant-lucid
 - servant-server
 - text
@@ -45,15 +46,15 @@ library:
   source-dirs: src
 
 executables:
-  lucid-htmx-exe:
-    main:                Main.hs
-    source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - lucid-htmx
+  # lucid-htmx-exe:
+  #   main:                Main.hs
+  #   source-dirs:         app
+  #   ghc-options:
+  #   - -threaded
+  #   - -rtsopts
+  #   - -with-rtsopts=-N
+  #   dependencies:
+  #   - lucid-htmx
 
   # lucid-htmx-ex0-exe:
   #   main: example0/Main.hs

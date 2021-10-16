@@ -33,7 +33,7 @@ import Hasql.TH
 import Hasql.Session (Session)
 import Hasql.Statement (Statement(..))
 import Lucid
-import Lucid.HTMX.Base (hx_include_, hx_target_)
+import Lucid.HTMX (hx_include_, hx_target_)
 import Lucid.HTMX.Safe hiding (hx_include_, hx_target_)
 import Network.Wai.Handler.Warp
 import Prelude
@@ -60,10 +60,6 @@ newtype ID a = ID { unID :: Int32 }
 newtype Secret = Secret { unSecret :: Text }
     deriving stock (Eq)
     deriving newtype (Show)
-
--- newtype Password = Password { unPassword :: Text }
---     deriving stock (Eq)
---     deriving newtype (Show)
 
 data UserAuth = UserAuth
     { userAuthSecret1 :: Secret
@@ -125,12 +121,12 @@ data NewCreet = NewCreet
 data Creet = Creet
     { creetID :: ID Creet
     , creetUserID :: ID AuthorizedUser
-    , creetParentID :: Maybe (ID Creet)
+    -- , creetParentID :: Maybe (ID Creet)
     , creetTimestamp :: UTCTime
     , creetContent :: Text
-    , creetRoars :: Int
-    , creetShits :: Int
+    , creetPositive :: Int
+    , creetNegative :: Int
+    -- , creetChildren [ID Creet]
     , creetTags :: [Tag]
-    , creetChildren :: [Creet] -- IDs
     }
     deriving stock (Eq, Show)
