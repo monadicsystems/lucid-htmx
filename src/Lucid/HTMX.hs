@@ -1,5 +1,5 @@
 module Lucid.HTMX
-   ( module Lucid.HTMX.Attributes
+   ( module Lucid.HTMX.Attributes 
    )
 where
 
