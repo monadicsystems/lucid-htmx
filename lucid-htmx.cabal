@@ -27,70 +27,16 @@ library
   exposed-modules:
       Lib
       Lucid.HTMX
-      Lucid.HTMX.Attributes
       Lucid.HTMX.Safe
-      Lucid.HTMX.Safe.Attributes
-      Lucid.HTMX.Safe.Types
   other-modules:
       Paths_lucid_htmx
   hs-source-dirs:
       src
   build-depends:
-      aeson
-    , base >=4.7 && <5
-    , bytestring
-    , contravariant-extras
-    , css-selectors
-    , hashable
-    , hasql
-    , hasql-th
-    , hedis
+      base >=4.7 && <5
+    , htmx
     , lucid
-    , profunctors
-    , servant
-    , servant-auth
-    , servant-lucid
-    , servant-server
     , text
-    , time
-    , tuple
-    , unordered-containers
-    , vector
-    , warp
-  default-language: Haskell2010
-
-executable books
-  main-is: Main.hs
-  other-modules:
-      Common
-      Paths_lucid_htmx
-  hs-source-dirs:
-      examples
-      examples/books
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      aeson
-    , base >=4.7 && <5
-    , bytestring
-    , contravariant-extras
-    , css-selectors
-    , hashable
-    , hasql
-    , hasql-th
-    , hedis
-    , lucid
-    , lucid-htmx
-    , profunctors
-    , servant
-    , servant-auth
-    , servant-lucid
-    , servant-server
-    , text
-    , time
-    , tuple
-    , unordered-containers
-    , vector
-    , warp
   default-language: Haskell2010
 
 test-suite lucid-htmx-test
@@ -102,26 +48,9 @@ test-suite lucid-htmx-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aeson
-    , base >=4.7 && <5
-    , bytestring
-    , contravariant-extras
-    , css-selectors
-    , hashable
-    , hasql
-    , hasql-th
-    , hedis
+      base >=4.7 && <5
+    , htmx
     , lucid
     , lucid-htmx
-    , profunctors
-    , servant
-    , servant-auth
-    , servant-lucid
-    , servant-server
     , text
-    , time
-    , tuple
-    , unordered-containers
-    , vector
-    , warp
   default-language: Haskell2010

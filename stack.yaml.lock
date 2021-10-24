@@ -39,6 +39,17 @@ packages:
       sha256: c5635bc53887b81087c3430341790d45cd4063340a0baa62bedd2e77ed4aa84d
   original:
     hackage: servant-lucid-0.9.0.2@sha256:693278d574dba7313e931200118424762c02682bbc654e8866be4e6d1c73d816,1803
+- completed:
+    name: htmx
+    version: 0.1.0.0
+    git: https://github.com/WaviLabs/haskell-htmx
+    pantry-tree:
+      size: 728
+      sha256: 0cfe351b63ddc37cec92a8e3747b60a23ccb6c8f1bdd125f6278194ccfd09892
+    commit: 94a0e6d7f47b4785bf590b1ffb58da50a3fec01d
+  original:
+    git: https://github.com/WaviLabs/haskell-htmx
+    commit: 94a0e6d7f47b4785bf590b1ffb58da50a3fec01d
 snapshots:
 - completed:
     size: 586923
