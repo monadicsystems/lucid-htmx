@@ -10,7 +10,6 @@ module Lucid.HTMX.Safe where
 
 import HTMX.Types
 import Lucid.HTMX
-import System.Console.Terminfo (Attributes)
 
 toUrlPiece' = ("/" <>) . toUrlPiece
 
