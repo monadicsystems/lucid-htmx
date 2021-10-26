@@ -6,12 +6,14 @@ cabal-version: 1.12
 
 name:           lucid-htmx
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/lucid-htmx#readme>
-homepage:       https://github.com/githubuser/lucid-htmx#readme
-bug-reports:    https://github.com/githubuser/lucid-htmx/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2021 Author name here
+synopsis:       Use htmx in your lucid templates
+description:    Please see the README on GitHub at <https://github.com/WaviLabs/lucid-htmx#readme>
+category:       Web, HTML
+homepage:       https://github.com/WaviLabs/lucid-htmx#readme
+bug-reports:    https://github.com/WaviLabs/lucid-htmx/issues
+author:         Wavi Labs LLC
+maintainer:     rashad@wavilabs.com
+copyright:      (c) 2021 Wavi Labs LLC
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
