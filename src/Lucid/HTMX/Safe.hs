@@ -194,13 +194,13 @@ hx_vals_ = Base.hx_vals_ . Text.decodeUtf8 . LBS.toStrict . Aeson.encode
 
 -- TODO: Study more. Basically all possible events plus event modifiers.
 
-hx_trigger_ :: HXTriggerVal -> Attribute
-hx_trigger_ = Base.hx_trigger_
+-- hx_trigger_ :: HXTriggerVal -> Attribute
+-- hx_trigger_ = Base.hx_trigger_
 
 -- BELOW EXPERIMENTAL!!
 
-hx_ws_ :: HXWSVal -> Attribute
-hx_ws_ = Base.hx_ws_
+-- hx_ws_ :: HXWS -> Attribute
+-- hx_ws_ = hx_ws_
 
 -- TODO: Add QuasiQuoters for parsing and generating values that are checked at compile time for the various arguments to the HTMX attributes.
 -- TODO: Write tests to check that the Val types are generating the correct Text for the HTMX attributes. Tests for HTMX tag functionality maybe?
