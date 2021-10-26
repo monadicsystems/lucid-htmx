@@ -1,27 +1,26 @@
 name:                lucid-htmx
 version:             0.1.0.0
-github:              "githubuser/lucid-htmx"
+github:              "WaviLabs/lucid-htmx"
 license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2021 Author name here"
+author:              "Wavi Labs LLC"
+maintainer:          "rashad@wavilabs.com"
+copyright:           "(c) 2021 Wavi Labs LLC"
 
 extra-source-files:
 - README.md
 - ChangeLog.md
 
 # Metadata used when publishing your package
-# synopsis:            Short description of your package
-# category:            Web
+synopsis:            Use htmx in your lucid templates
+category:            Web, HTML
 
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/githubuser/lucid-htmx#readme>
+description:         Please see the README on GitHub at <https://github.com/WaviLabs/lucid-htmx#readme>
 
 dependencies:
 - base >= 4.7 && < 5
-- htmx
 - lucid
 - servant
 - text
