@@ -37,7 +37,7 @@ hxGet_ = makeAttribute "data-hx-get"
 hxHeaders_ :: Text -> Attribute
 hxHeaders_ = makeAttribute "data-hx-headers"
 
--- | <https://htmx.org/attributes/hx-history-alt/>
+-- | <https://htmx.org/attributes/hx-history-elt/>
 hxHistoryElt_ :: Attribute
 hxHistoryElt_ = makeAttribute "data-hx-history-elt" mempty
 
