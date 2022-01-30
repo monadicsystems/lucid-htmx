@@ -5,15 +5,15 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           lucid-htmx
-version:        0.1.0.0
+version:        0.1.0.5
 synopsis:       Use htmx in your lucid templates
-description:    Please see the README on GitHub at <https://github.com/WaviLabs/lucid-htmx#readme>
+description:    Please see the README on GitHub at <https://github.com/MonadicSystems/lucid-htmx#readme>
 category:       Web, HTML
-homepage:       https://github.com/WaviLabs/lucid-htmx#readme
-bug-reports:    https://github.com/WaviLabs/lucid-htmx/issues
-author:         Wavi Labs LLC
-maintainer:     rashad@wavilabs.com
-copyright:      (c) 2021 Wavi Labs LLC
+homepage:       https://github.com/MonadicSystems/lucid-htmx#readme
+bug-reports:    https://github.com/MonadicSystems/lucid-htmx/issues
+author:         Monadic Systems LLC
+maintainer:     tech@monadic.systems
+copyright:      2022 Monadic Systems LLC
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
@@ -23,13 +23,12 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/WaviLabs/lucid-htmx
+  location: https://github.com/MonadicSystems/lucid-htmx
 
 library
   exposed-modules:
-      Lucid.HTMX
-      Lucid.HTMX.QuasiQuoters
-      Lucid.HTMX.Servant
+      Lucid.Htmx
+      Lucid.Htmx.Servant
   other-modules:
       Paths_lucid_htmx
   hs-source-dirs:

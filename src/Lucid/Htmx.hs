@@ -1,9 +1,43 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Lucid.HTMX where
+module Lucid.Htmx
+  ( hxBoost_,
+    hxConfirm_,
+    hxEncoding_,
+    hxExt_,
+    hxDelete_,
+    hxDisable_,
+    hxGet_,
+    hxHeaders_,
+    hxHistoryElt_,
+    hxInclude_,
+    hxIndicator_,
+    hxParams_,
+    hxPatch_,
+    hxPost_,
+    hxPreserve_,
+    hxPrompt_,
+    hxPushUrl_,
+    hxPut_,
+    hxRequest_,
+    hxSelect_,
+    hxSse_,
+    hxSwapOob_,
+    hxSwap_,
+    hxTarget_,
+    hxTrigger_,
+    hxVals_,
+    hxWs_,
+    useHtmx,
+    useHtmxExtension,
+    useHtmxVersion,
+    useHtmxVersionExtension,
+  )
+where
 
+import Data.Text (Text, pack)
+import Lucid (Html, HtmlT, script_, src_)
 import Lucid.Base (Attribute, makeAttribute)
-import Data.Text (Text)
 
 -- | <https://htmx.org/attributes/hx-boost/>
 hxBoost_ :: Text -> Attribute
@@ -112,3 +146,39 @@ hxVals_ = makeAttribute "data-hx-vals"
 -- | <https://htmx.org/attributes/hx-ws/>
 hxWs_ :: Text -> Attribute
 hxWs_ = makeAttribute "data-hx-ws"
+
+-- | Place in your @head_@ tag to use htmx attributes in your lucid template
+useHtmx :: Monad m => HtmlT m ()
+useHtmx = script_ [src_ htmxSrc] ("" :: Html ())
+
+-- | Place in your template after @useHtmx@, but before where the extension is used via @hxExt_@
+useHtmxExtension :: Monad m => Text -> HtmlT m ()
+useHtmxExtension ext = script_ [src_ $ htmxSrc <> extensionPath ext] ("" :: Html ())
+
+-- | Choose the version of htmx to use using a 3-tuple representing semantic versioning
+useHtmxVersion :: Monad m => (Int, Int, Int) -> HtmlT m ()
+useHtmxVersion semVer = script_ [src_ $ htmxSrcWithSemVer semVer] ("" :: Html ())
+
+-- | Choose the version of a htmx extension you want to use.
+-- Should only be used when using @useHtmxVersion@ and the semantic version should be the same
+useHtmxVersionExtension :: Monad m => (Int, Int, Int) -> Text -> HtmlT m ()
+useHtmxVersionExtension semVer ext = script_ [src_ $ htmxSrcWithSemVer semVer <> extensionPath ext] ("" :: Html ())
+
+htmxSrc :: Text
+htmxSrc = "https://unpkg.com/htmx.org"
+
+showT :: Show a => a -> Text
+showT = pack . show
+
+htmxSrcWithSemVer :: (Int, Int, Int) -> Text
+htmxSrcWithSemVer (major, minor, patch) =
+  htmxSrc
+    <> "@"
+    <> showT major
+    <> "."
+    <> showT minor
+    <> "."
+    <> showT patch
+
+extensionPath :: Text -> Text
+extensionPath ext = "/dist/ext/" <> ext <> ".js"

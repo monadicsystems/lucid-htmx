@@ -1,10 +1,10 @@
 name:                lucid-htmx
-version:             0.1.0.0
-github:              "WaviLabs/lucid-htmx"
+version:             0.1.0.5
+github:              "MonadicSystems/lucid-htmx"
 license:             BSD3
-author:              "Wavi Labs LLC"
-maintainer:          "rashad@wavilabs.com"
-copyright:           "(c) 2021 Wavi Labs LLC"
+author:              "Monadic Systems LLC"
+maintainer:          "tech@monadic.systems"
+copyright:           "2022 Monadic Systems LLC"
 
 extra-source-files:
 - README.md
@@ -17,7 +17,7 @@ category:            Web, HTML
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/WaviLabs/lucid-htmx#readme>
+description:         Please see the README on GitHub at <https://github.com/MonadicSystems/lucid-htmx#readme>
 
 dependencies:
 - base >= 4.7 && < 5
