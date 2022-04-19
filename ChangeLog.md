@@ -4,5 +4,7 @@
 
 First release of `lucid-htmx`!
 
-## Next version
+## 0.1.0.6
+
+Relax upper bound of `lucid` dependency up to, and including, 2.11
 

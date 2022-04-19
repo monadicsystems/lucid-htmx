@@ -20,6 +20,7 @@
 resolver:
   url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/18/9.yaml
 
+pvp-bounds: both
 # User packages to be built.
 # Various formats can be used as shown in the example below.
 #

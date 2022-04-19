@@ -1,5 +1,5 @@
 name:                lucid-htmx
-version:             0.1.0.5
+version:             0.1.0.6
 github:              "MonadicSystems/lucid-htmx"
 license:             BSD3
 author:              "Monadic Systems LLC"
@@ -21,7 +21,7 @@ description:         Please see the README on GitHub at <https://github.com/Mona
 
 dependencies:
 - base >= 4.7 && < 5
-- lucid
+- lucid >= 2.9.12.1 && <= 2.11
 - servant
 - text
 
