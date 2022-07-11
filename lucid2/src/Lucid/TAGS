@@ -1,0 +1,919 @@
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/STS/Client.hs,1337
+module Main whereMain7,194
+scrollToTopx = doscrollToTopx55,1689
+addCookie _ = setGameCookie "p" "aa:1001" (3*60*60)addCookie62,1779
+main = domain65,1847
+setupWEBRTC  NoGameIdGiven _ = return ()setupWEBRTC126,4822
+receiveCommand cWorld socket e = doreceiveCommand132,5013
+handleCommand (LoginCommand  x) cWorld socket  = dohandleCommand146,5547
+handleActionCommand (Background url) _ _ = dohandleActionCommand159,5893
+handleLoginCommand (NewGame gameEntry cookie) cWorld socket = dohandleLoginCommand168,6241
+handleSayingCommand (SocketClosed pId) cWorld socket = dohandleSayingCommand196,7569
+    msg = T.unlines ["handleSayingCommand: HereWeGo"msg238,9368
+      answered    = whoAnswered actvityStatusanswered287,11438
+      voted       = whoVoted    actvityStatusvoted288,11484
+selectVote w socket e = doselectVote294,11658
+thereIsSaying cat = "There is an old <strong>" <> cat <> "</strong> saying: "thereIsSaying306,12108
+showPhrase  = ffi "JSON.stringify(%1)"showPhrase309,12216
+readCommand = ffi "JSON.parse(%1)"readCommand312,12291
+jsSubmitPhrase cWorld socket _ = dojsSubmitPhrase315,12384
+jsStartGame socket _ = dojsStartGame327,12845
+setHeadingC cWorld = dosetHeadingC332,12973
+draw drawingCommand cWorld socket = dodraw337,13125
+handleDraw DrawStartGame _ _ = dohandleDraw343,13365
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/STS/Lucid/dist-newstyle/build/x86_64-linux/ghc-9.2.2/Lucid-0.1.0.0/build/autogen/Paths_Lucid.hs,1376
+module Paths_Lucid (Paths_Lucid5,131
+catchIO = Exception.catchcatchIO30,705
+version = Version [0,1,0,0] []version33,751
+getDataFileName name = dogetDataFileName36,826
+bindir     = "/home/henry/.cabal/bin"bindir45,1074
+libdir     = "/home/henry/.cabal/lib/x86_64-linux-ghc-9.2.2/Lucid-0.1.0.0-inplace"libdir46,1112
+dynlibdir  = "/home/henry/.cabal/lib/x86_64-linux-ghc-9.2.2"dynlibdir47,1195
+datadir    = "/home/henry/.cabal/share/x86_64-linux-ghc-9.2.2/Lucid-0.1.0.0"datadir48,1256
+libexecdir = "/home/henry/.cabal/libexec/x86_64-linux-ghc-9.2.2/Lucid-0.1.0.0"libexecdir49,1333
+sysconfdir = "/home/henry/.cabal/etc"sysconfdir50,1412
+getBinDir     = catchIO (getEnv "Lucid_bindir")     (\_ -> return bindir)getBinDir52,1451
+getLibDir     = catchIO (getEnv "Lucid_libdir")     (\_ -> return libdir)getLibDir53,1525
+getDynLibDir  = catchIO (getEnv "Lucid_dynlibdir")  (\_ -> return dynlibdir)getDynLibDir54,1599
+getDataDir    = catchIO (getEnv "Lucid_datadir")    (\_ -> return datadir)getDataDir55,1676
+getLibexecDir = catchIO (getEnv "Lucid_libexecdir") (\_ -> return libexecdir)getLibexecDir56,1751
+getSysconfDir = catchIO (getEnv "Lucid_sysconfdir") (\_ -> return sysconfdir)getSysconfDir57,1829
+joinFileName ""  fname = fnamejoinFileName63,1956
+pathSeparator = '/'pathSeparator71,2211
+isPathSeparator c = c == '/'isPathSeparator74,2264
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/STS/Lucid/dist-newstyle/build/x86_64-linux/ghc-9.2.2/Welcome-0.1.0.0/build/autogen/Paths_Welcome.hs,1398
+module Paths_Welcome (Paths_Welcome5,131
+catchIO = Exception.catchcatchIO30,707
+version = Version [0,1,0,0] []version33,753
+getDataFileName name = dogetDataFileName36,828
+bindir     = "/home/henry/.cabal/bin"bindir45,1076
+libdir     = "/home/henry/.cabal/lib/x86_64-linux-ghc-9.2.2/Welcome-0.1.0.0-inplace"libdir46,1114
+dynlibdir  = "/home/henry/.cabal/lib/x86_64-linux-ghc-9.2.2"dynlibdir47,1199
+datadir    = "/home/henry/.cabal/share/x86_64-linux-ghc-9.2.2/Welcome-0.1.0.0"datadir48,1260
+libexecdir = "/home/henry/.cabal/libexec/x86_64-linux-ghc-9.2.2/Welcome-0.1.0.0"libexecdir49,1339
+sysconfdir = "/home/henry/.cabal/etc"sysconfdir50,1420
+getBinDir     = catchIO (getEnv "Welcome_bindir")     (\_ -> return bindir)getBinDir52,1459
+getLibDir     = catchIO (getEnv "Welcome_libdir")     (\_ -> return libdir)getLibDir53,1535
+getDynLibDir  = catchIO (getEnv "Welcome_dynlibdir")  (\_ -> return dynlibdir)getDynLibDir54,1611
+getDataDir    = catchIO (getEnv "Welcome_datadir")    (\_ -> return datadir)getDataDir55,1690
+getLibexecDir = catchIO (getEnv "Welcome_libexecdir") (\_ -> return libexecdir)getLibexecDir56,1767
+getSysconfDir = catchIO (getEnv "Welcome_sysconfdir") (\_ -> return sysconfdir)getSysconfDir57,1847
+joinFileName ""  fname = fnamejoinFileName63,1976
+pathSeparator = '/'pathSeparator71,2231
+isPathSeparator c = c == '/'isPathSeparator74,2284
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/STS/Lucid/dist-newstyle/build/x86_64-linux/ghc-9.2.2/Welcome-0.1.0.0/x/loginLucid/build/loginLucid/autogen/Paths_Welcome.hs,1409
+module Paths_Welcome (Paths_Welcome5,131
+catchIO = Exception.catchcatchIO30,707
+version = Version [0,1,0,0] []version33,753
+getDataFileName name = dogetDataFileName36,828
+bindir     = "/home/henry/.cabal/bin"bindir45,1076
+libdir     = "/home/henry/.cabal/lib/x86_64-linux-ghc-9.2.2/Welcome-0.1.0.0-inplace-loginLucid"libdir46,1114
+dynlibdir  = "/home/henry/.cabal/lib/x86_64-linux-ghc-9.2.2"dynlibdir47,1210
+datadir    = "/home/henry/.cabal/share/x86_64-linux-ghc-9.2.2/Welcome-0.1.0.0"datadir48,1271
+libexecdir = "/home/henry/.cabal/libexec/x86_64-linux-ghc-9.2.2/Welcome-0.1.0.0"libexecdir49,1350
+sysconfdir = "/home/henry/.cabal/etc"sysconfdir50,1431
+getBinDir     = catchIO (getEnv "Welcome_bindir")     (\_ -> return bindir)getBinDir52,1470
+getLibDir     = catchIO (getEnv "Welcome_libdir")     (\_ -> return libdir)getLibDir53,1546
+getDynLibDir  = catchIO (getEnv "Welcome_dynlibdir")  (\_ -> return dynlibdir)getDynLibDir54,1622
+getDataDir    = catchIO (getEnv "Welcome_datadir")    (\_ -> return datadir)getDataDir55,1701
+getLibexecDir = catchIO (getEnv "Welcome_libexecdir") (\_ -> return libexecdir)getLibexecDir56,1778
+getSysconfDir = catchIO (getEnv "Welcome_sysconfdir") (\_ -> return sysconfdir)getSysconfDir57,1858
+joinFileName ""  fname = fnamejoinFileName63,1987
+pathSeparator = '/'pathSeparator71,2242
+isPathSeparator c = c == '/'isPathSeparator74,2295
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/STS/Lucid/src/Lucid/Htmx.hs,2384
+module Lucid.HtmxLucid.Htmx3,36
+hxBoost_ = makeAttributes "data-hx-boost"hxBoost_44,745
+hxConfirm_ = makeAttributes "data-hx-confirm"hxConfirm_48,868
+hxDelete_ = makeAttributes "data-hx-delete"hxDelete_52,993
+hxDisable_ = makeAttributes "data-hx-disable" memptyhxDisable_56,1110
+hxEncoding_ = makeAttributes "data-hx-encoding"hxEncoding_60,1246
+hxExt_ = makeAttributes "data-hx-ext"hxExt_64,1367
+hxGet_ = makeAttributes "data-hx-get"hxGet_68,1478
+hxHeaders_ = makeAttributes "data-hx-headers"hxHeaders_72,1597
+hxHistoryElt_ = makeAttributes "data-hx-history-elt" memptyhxHistoryElt_76,1723
+hxInclude_ = makeAttributes "data-hx-include"hxInclude_80,1864
+hxIndicator_ = makeAttributes "data-hx-indicator"hxIndicator_84,1995
+hxParams_ = makeAttributes "data-hx-params"hxParams_88,2124
+hxPatch_ = makeAttributes "data-hx-patch"hxPatch_92,2245
+hxPost_ = makeAttributes "data-hx-post"hxPost_96,2362
+hxPreserve_ = makeAttributes "data-hx-preserve"hxPreserve_100,2485
+hxPrompt_ = makeAttributes "data-hx-prompt"hxPrompt_104,2612
+hxPushUrl_ = makeAttributes "data-hx-push-url"hxPushUrl_108,2738
+hxPut_ = makeAttributes "data-hx-put"hxPut_112,2858
+hxRequest_ = makeAttributes "data-hx-request"hxRequest_116,2977
+hxSelect_ = makeAttributes "data-hx-select"hxSelect_120,3102
+hxSse_ = makeAttributes "data-hx-sse"hxSse_124,3219
+hxSwapOob_ = makeAttributes "data-hx-swap-oob"hxSwapOob_128,3339
+hxSwap_ = makeAttributes "data-hx-swap"hxSwap_132,3461
+hxTarget_ = makeAttributes "data-hx-target"hxTarget_136,3580
+hxTrigger_ = makeAttributes "data-hx-trigger"hxTrigger_140,3705
+hxVals_ = makeAttributes "data-hx-vals"hxVals_144,3826
+hxWs_ = makeAttributes "data-hx-ws"hxWs_148,3937
+useHtmx = script_ [src_ htmxSrc] ("" :: Html ())useHtmx152,4084
+useHtmxExtension ext = script_ [src_ $ htmxSrc <> extensionPath ext] ("" :: Html ())useHtmxExtension156,4281
+useHtmxVersion semVer = script_ [src_ $ htmxSrcWithSemVer semVer] ("" :: Html ())useHtmxVersion160,4514
+useHtmxVersionExtension semVer ext = script_ [src_ $ htmxSrcWithSemVer semVer <> extensionPath ext] ("" :: Html ())useHtmxVersionExtension165,4829
+htmxSrc = "https://unpkg.com/htmx.org"htmxSrc168,4962
+showT = pack . showshowT171,5031
+htmxSrcWithSemVer (major, minor, patch) =htmxSrcWithSemVer174,5097
+extensionPath ext = "/dist/ext/" <> ext <> ".js"extensionPath184,5270
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/STS/Lucid/src/Welcome.hs,619
+module Games.STS.Lucid.Welcome whereGames.STS.Lucid.Welcome7,170
+t = renderToFile "a.html" topt18,432
+combine x = mconcat . map xcombine21,507
+scripts =scripts24,555
+  where s x = script_ [src_ ("/static/js/" <> x)] ("" :: String) :: Html ()s40,947
+metas = combinemetas43,1041
+cssLinks = combine scssLinks57,1442
+  s x =s65,1569
+top = doctype_ <> head_ (metas <> cssLinks <> scripts)top69,1670
+d1 = div_ [id_ "error-region", class_ "error hidden"] d173,1741
+d2 =d279,1965
+d3 = div_ [id_ "errors"] "" <>d3108,3592
+d4 =  div_ [id_ "login-region", class_ "hidden explanation cleared"] d4112,3691
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/STS/Lucid/src/loginLucid.hs,54
+main = domain13,296
+template1 = dotemplate120,431
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/STS/Phrases.hs,150
+module Games.STS.Phrases (readPhrases) whereGames.STS.Phrases1,0
+data P = P Int Text Text TextP9,269
+readPhrases fileName = doreadPhrases13,377
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/STS/Phrases/Phrases.hs,2969
+module Games.STS.Phrases.Phrases whereGames.STS.Phrases.Phrases4,73
+data Phrase2 = Phrase2 Text TextPhrase222,586
+data Phrase = Phrase Int Text Text TextPhrase25,653
+phraseInt (Phrase i _ _ _) = iphraseInt29,754
+phrase2Saying (Phrase2 _ x) = xphrase2Saying31,786
+readPhrases bs =readPhrases36,954
+    parseV (category, phrase) = parsePhrase category phraseparseV45,1159
+addInt = zipWith replaceIntaddInt48,1260
+    replaceInt (Phrase _ c t1 t2) i = Phrase i c t1 t2replaceInt50,1296
+removeDuplicates ps =removeDuplicates53,1395
+lDistance p2 = go p2 []lDistance62,1602
+    go (x1:x2:xs) acc =go64,1634
+inFile = "/home/henry/nadineloveshenry/bin/nlh/src/Games/STS/Phrases/phrases.csv"inFile72,1902
+outFile1 = "/home/henry/nadineloveshenry/bin/nlh/src/Games/STS/Phrases/phrases.txt"outFile173,1984
+outFile2 = "/home/henry/nadineloveshenry/bin/nlh/src/Games/STS/Phrases/noSep.txt"outFile274,2068
+outFile3 = "/home/henry/nadineloveshenry/bin/nlh/src/Games/STS/Phrases/distances.txt"outFile375,2150
+main = domain81,2301
+parsePhrase category phrase = Phrase2 (decodeUtf8 category) (decodeUtf8 phrase)parsePhrase114,3494
+readPhraseFile = doreadPhraseFile118,3606
+readPhrasesAsMap = doreadPhrasesAsMap126,3775
+lastPunctuation p2@(Phrase2 c t) = resultlastPunctuation136,4022
+    str = T.unpack tstr138,4072
+    mbLastIndex = findIndex isPunctuation . reversembLastIndex139,4093
+    splitReversed i s = splitAt (length s - i) ssplitReversed140,4145
+    fromPieces (a,b) = Phrase 0 c (T.init . T.pack $ a) (T.pack b)fromPieces141,4194
+    result = case mbLastIndex str ofresult142,4261
+hasASimpleWord p2@(Phrase2 _ _) = tryWords p2 simpleWordshasASimpleWord148,4487
+simpleWords = nub [ "is never", "is", "has not", "has no", "has", "will not", "will",simpleWords151,4568
+pp = Phrase2 "cat" "(Dont try to) only, holds three liters."pp176,6201
+t1 = findIndex isPunctuation . reverse . T.unpackt1178,6263
+isPunctuation x = x `elem` (";,:.?" :: String)isPunctuation180,6314
+t2 = levenshteinDistance defaultEditCostst2182,6362
+t3 = restrictedDamerauLevenshteinDistance defaultEditCostst3183,6404
+pp2 = Phrase2 "cat" "A fly that lands on a carabao feels itself to be higher than the carabao"pp2185,6464
+reasonable p2@(Phrase2 c t) s = resultreasonable188,6598
+    r = w2 % (w1 + w2)r192,6721
+    nonZero = w1 > 0 && w2 > 0nonZero193,6744
+    shorterThanPrefix = w2 <= w1shorterThanPrefix194,6775
+    required = nonZero && shorterThanPrefixrequired195,6808
+    bothShort = w1 < 5 && w2 < 5bothShort196,6852
+    suffixInRange = w2 >= 3 && w2 <= 6suffixInRange197,6885
+    result = required && (r < (1%2) || suffixInRange || bothShort)result198,6924
+tryWord p2@(Phrase2 c t) s = tryWord202,7096
+tryWords  p2@(Phrase2 c t) ws =tryWords209,7287
+    addSpaces x = " " <> x <> " "addSpaces212,7365
+    a = map (tryWord p2 . addSpaces) wsa213,7399
+    b = rights ab214,7439
+    c = head bc215,7456
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/STS/Phrases/p.hs,137
+module Main whereMain1,0
+addPhraseId l =addPhraseId3,19
+f = unlines . map addPhraseId . linesf10,150
+main = interact fmain12,189
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/STS/Pure/Commands.hs,12006
+module Games.STS.Pure.Commands whereGames.STS.Pure.Commands3,37
+runCommandPure gc ss sm = runSTSCommand reducedCommand ss newSMrunCommandPure78,3519
+    reduce (STSCommand x) = xreduce80,3591
+    reducedCommand = reduce gcreducedCommand82,3703
+    pId = myPid sspId83,3734
+    history = sm ^. sayingPlayerHistoryMaphistory84,3753
+    newHistory = M.insertWith  (++) pId [reducedCommand] historynewHistory85,3796
+    newSM = sm & sayingPlayerHistoryMap .~ newHistorynewSM86,3861
+runSTSCommand (SocketClosed pId) ss smrunSTSCommand90,3998
+    broadcasts = [BroadCast (BroadCastToEveryoneElse [pId]) [SocketClosed pId]]broadcasts94,4152
+    waitingState = getGWS " in SocketClosed" smwaitingState95,4232
+    sm1 = sm & sayingBroadcasts `appending` broadcastssm196,4280
+    newSM = case waitingState ofnewSM97,4335
+    shouldRun = allReceived sm1shouldRun101,4499
+    seeIfWeShouldRunForAnswers = if shouldRun then sm2 else sm1seeIfWeShouldRunForAnswers102,4531
+      where sm2 = hereAreTheVotes BroadCastToEveryone ss sm1sm2103,4595
+    gameHasStarted = getGWS " in StartGame1" sm  /= GameLoggingIngameHasStarted112,5010
+    newSM = sm & rememberWhoIsPlaying ssnewSM113,5076
+    waitingState = getGWS " in LetsGetGoing" smwaitingState126,5685
+    player = toPlayer sm pIdplayer127,5733
+    mbAnswer = haveAnswered (sm ^. sayingPhraseId) pId (sm ^. sayingAnswers)mbAnswer128,5762
+    newActivity = computePlayerActivityAfterLogin waitingState (player ^. playerActivity)newActivity129,5839
+    mbPhrase = if waitingState == GameLoggingInmbPhrase130,5929
+    broadcasts = [BroadCast (BroadCastToPids [pId])broadcasts133,6064
+    sm1 = modifyActivity pId (const newActivity) smsm1135,6189
+    sm2 = sm1 & sayingBroadcasts `appending` broadcastssm2136,6241
+    newSM = appendStatus sm2newSM137,6297
+    computePlayerActivityAfterLogin gws pa = if gws /= GameWaitingForVotescomputePlayerActivityAfterLogin139,6419
+    pId = myPid sspId153,7059
+    sm1 = if weHaveASaying smsm1154,7078
+    g = sm ^. sayingRandomGeng159,7289
+    fullPhraseMap = ss ^. (sayingStatic . sayingPhraseMap)fullPhraseMap161,7350
+    randomPhrase = phraseIdToPhrase ss randomPhraseIdrandomPhrase165,7549
+    phraseWithoutAnswer = removeAnswer phrasephraseWithoutAnswer169,7667
+    broadcasts = [BroadCast (BroadCastToPids [pId])broadcasts170,7713
+    newSM = sm1 & sayingBroadcasts `appending` broadcastsnewSM173,7823
+    phrase = phraseIdToPhrase ss phraseIdphrase183,8295
+    textLower = lowerCaseFirstCharacter texttextLower184,8337
+    answer = Answer {answer185,8382
+    sm2 = sm1 & insertAnswer answersm2193,8696
+    sm3 = sm2 & hereAreTheVotes BroadCastToEveryone sssm3194,8732
+    newSM = (if shouldRun then sm3 else sm2) & appendStatusnewSM196,8851
+    insertAnswer ans = sayingAnswers .~ newAnsMapinsertAnswer198,8973
+        pAmap = fromMaybe M.empty (M.lookup phraseId aMap)pAmap201,9080
+        newPaMap = M.insert pId ans pAmapnewPaMap202,9139
+        newAnsMap = AnswerMap $ M.insert phraseId newPaMap aMapnewAnsMap203,9181
+    phrase = phraseIdToPhrase ss phraseIdphrase222,10077
+    correctAnswerText = phraseCorrectPart phrasecorrectAnswerText223,10119
+    playerAnswerMap1 = aMap ^. at phraseId . _JustplayerAnswerMap1227,10323
+    myAnswer = fromMaybemyAnswer229,10397
+    forVoteMap = _unForVote (sm1 ^. sayingForVote)forVoteMap236,10731
+    mbForVote = M.lookup voteIndex forVoteMapmbForVote240,10892
+    myAnswerType = trc ("myAnswerType: " ++ show (voteIndex, forVoteMap))myAnswerType242,10969
+    answerTypePids CorrectAnswer = []answerTypePids249,11408
+    theirPids = answerTypePids myAnswerTypetheirPids252,11520
+    myVotedByMe = if myAnswerType == CorrectAnswer ||myVotedByMe255,11656
+    myNewAnswer = myAnswer & (answerVotes . votedByMe) .~ myVotedByMemyNewAnswer260,11944
+    playerAnswerMap2 = M.insert pId myNewAnswer playerAnswerMap1playerAnswerMap2264,12152
+    answerMapForCorrectAnswer = AnswerMap (M.insert phraseId playerAnswerMap2 aMap)answerMapForCorrectAnswer266,12293
+    theirAnswers = mapMaybe (`M.lookup` playerAnswerMap2) theirPidstheirAnswers271,12551
+    addToVotedForMe ans = ans & (answerVotes . votedForMe) %~  (++) [pId]addToVotedForMe275,12749
+    theirNewAnswers = map addToVotedForMe theirAnswerstheirNewAnswers282,13141
+    playerAnswerMap3 = foldr addTheirNewAnswer playerAnswerMap2 theirNewAnswersplayerAnswerMap3285,13298
+    addTheirNewAnswer a = M.insert (_answerPlayerId a) aaddTheirNewAnswer287,13456
+    answerMapForVotedAnswers = AnswerMap (M.insert phraseId playerAnswerMap3 aMap)answerMapForVotedAnswers289,13555
+    answerMapWithVoteAdded = if myVotedByMe == VoteForCorrectAnsweranswerMapWithVoteAdded291,13678
+    answerMapWithScore = scoreThisPhrase phraseId (sm1 ^. lensPlayerMap) answerMapWithVoteAddedanswerMapWithScore294,13825
+    smWithScores = sm1 & sayingAnswers .~ answerMapWithScoresmWithScores295,13921
+    detailsCommand = ScoreDetails  whoSaid scoreReason phrasedetailsCommand297,14052
+    broadcasts = [broadcasts298,14114
+    sm2 = smWithScoressm2305,14336
+    newSM = (if shouldRun then sm2 else smWithScores) & appendStatusnewSM311,14584
+setupCommand ss sm = (pId, sm2, shouldRun)setupCommand320,15018
+    pId = myPid sspId324,15211
+    sm1 = sm & lensResponses %~ S.insert pIdsm1325,15230
+    sm2 = if shouldRun then sm1 & lensResponses .~ S.empty else sm1sm2326,15275
+    shouldRun = allReceived sm1shouldRun327,15343
+activatePlayers sm = foldr activateOne sm (allPlayerIds sm)activatePlayers330,15426
+    activateOne pId =  modifyActivity pId (\a ->activateOne333,15556
+appendComment text sm = sm & sayingBroadcasts `appending` commentCommandappendComment338,15754
+    commentCommand = [BroadCast BroadCastToEveryone [Comment text]]commentCommand340,15835
+appendStatus smappendStatus343,15951
+    loginStatus   = makeLoginStatus (allPlayers sm)loginStatus347,16054
+    actvityStatus = makeActivityStatus smactvityStatus348,16106
+    scoreStatus   = makeScoreBoard smscoreStatus349,16148
+    command = SendStatus (ScoreStatus (actvityStatus ++ loginStatus) scoreStatus)command350,16186
+    broadcasts = [BroadCast BroadCastToEveryone [command]]broadcasts351,16268
+    newSM = sm & sayingBroadcasts `appending` broadcastsnewSM352,16327
+makeActivityStatus sm = [WhoAnswered answered, WhoVoted voted]makeActivityStatus355,16441
+    result phraseId = (playerNamesAnswered, playerNamesVoted)result358,16580
+        answers = theseAnswers sm phraseIdanswers361,16682
+        pMap = sm ^. sayingPlayerMappMap363,16751
+        pName pId = pMap ^. at pId . _Just . playerPrettyNamepName365,16828
+        hasVoted ans = (ans ^. (answerVotes . votedByMe)) /= defhasVoted367,16925
+        answersVoted = filter hasVoted answersanswersVoted369,17023
+        playerNamesAnswered = map getPrettyName answersplayerNamesAnswered371,17114
+        playerNamesVoted = map getPrettyName answersVotedplayerNamesVoted373,17211
+        getPrettyName ans = pName (ans ^. answerPlayerId)getPrettyName375,17315
+makeScoreBoard sm = resultmakeScoreBoard378,17422
+    ps     = allPlayers smps380,17457
+    am     = sm ^. sayingAnswersam381,17484
+    names  = map _playerName psnames382,17517
+    pIds   = map _playerId pspIds383,17549
+    scores = map (sumOverPhrases am) pIdsscores384,17579
+    result = go [] names scores pIdsresult385,17621
+        go acc [] _ _ = accgo387,17670
+hereAreTheVotes toWhom ss smhereAreTheVotes392,17929
+    answers = theseAnswers sm phraseIdanswers399,18168
+    incorrectAnswers = filter (\x -> not (x ^. answerIsCorrect)) answersincorrectAnswers400,18207
+    answersWithType = (phraseCorrectPart (phraseIdToPhrase ss phraseId), CorrectAnswer) :answersWithType402,18324
+    answersUnique = M.assocs $ foldr accumulate M.empty answersWithTypeanswersUnique409,18829
+    accumulate (x,aType) = M.insertWith combineAnswerTypes x aTypeaccumulate410,18901
+    forVote = ForVote (M.fromList $ zip [1..] answersUnique)forVote413,19095
+    forSending = M.assocs . M.map fst . _unForVote $ forVoteforSending415,19213
+    broadcasts = [BroadCast toWhom  [HereAreTheVotes randomized]]broadcasts420,19488
+    newSM = sm1 & sayingForVote .~ forVotenewSM421,19554
+    combineAnswerTypes (PlayerAnswer pids1) (PlayerAnswer pids2) =combineAnswerTypes426,19787
+checkAnswer t1 t2  = onlyLowerAlphaNum t1 == onlyLowerAlphaNum t2checkAnswer434,20223
+phrasesUsedFromGameSavedData sm = usedphrasesUsedFromGameSavedData437,20352
+    gsd = mapMaybe (\x -> M.lookup GameSoTheySay (x ^. playerSavedData) ) (allPlayers sm)gsd440,20427
+    toInts = readGameSavedInfo . _gamesSavedInfotoInts444,20669
+    allPhraseIds = map PhraseId . concatMap toInts $ gsdallPhraseIds446,20749
+    used = S.fromList allPhraseIdsused447,20806
+readGameSavedInfo = map read . words . T.unpackreadGameSavedInfo454,21037
+showGameSavedInfo = T.unwords . map tShowshowGameSavedInfo457,21121
+weHaveASaying sm = isJust (sm ^. sayingPhraseId)weHaveASaying460,21203
+saveChosenPhrase phraseId ss sm = newSMsaveChosenPhrase464,21415
+    newSM =   sm & addPhrasenewSM466,21463
+    game = ss ^. (sayingStatic . sayingGame)game469,21605
+    addtoGSD gsd = gsd & gamesSavedInfo %~addtoGSD471,21699
+    addPhrase = updateGameSavedData game addtoGSDaddPhrase474,21849
+scoresWithPhraseIdPlayerId sm phraseId pId = maybeToList srscoresWithPhraseIdPlayerId477,21996
+    am    = sm ^. sayingAnswersam479,22064
+    pMap  = sm ^. sayingPlayerMappMap480,22096
+    pName = playerIdToPlayerName pMap pIdpName481,22130
+    getAnswer x = answerMapToAns phraseId x amgetAnswer483,22209
+    sr    = do -- running in Maybe Monadsr484,22256
+scoresWithPhraseId sm phraseId = resultscoresWithPhraseId494,22646
+    zipped = concatMap (scoresWithPhraseIdPlayerId sm phraseId)  (M.keys (sm ^. sayingPlayerMap))zipped496,22694
+    result = unzip zippedresult497,22792
+answerMapToAns phraseId pId am = am ^. unAnswerMap . at phraseId . _Just  ^.  at pIdanswerMapToAns500,22887
+answerMapToSR phraseId pId  = fmap  _answerScoreReason . answerMapToAns phraseId pIdanswerMapToSR503,23045
+sumOverPhrases am pId = sum $ map myScore (M.keys (_unAnswerMap am))sumOverPhrases509,23280
+    myScore phraseId = maybe (Score 0)   _srScore (answerMapToSR phraseId pId am)myScore511,23357
+shrinkGamesSavedInto gsd = newGSDshrinkGamesSavedInto514,23497
+    gsi = gsd ^. gamesSavedInfogsi516,23539
+    ws = T.words gsiws517,23571
+    half = length ws `div` 2half518,23592
+    newGSI = T.unwords (take half ws)newGSI519,23621
+    newGSD = gsd & gamesSavedInfo .~ newGSInewGSD520,23659
+haveWeUsedTooManyPhrases ss sm = newSMhaveWeUsedTooManyPhrases523,23778
+    pm = ss ^. sayingStatic . sayingPhraseMappm525,23825
+    used = phrasesUsedFromGameSavedData smused526,23871
+    percentageUsed = (round :: Double -> Int) $percentageUsed527,23914
+    game = ss ^. (sayingStatic . sayingGame)game530,24054
+    sm1 = sm & updateGameSavedData game shrinkGamesSavedIntosm1531,24099
+    sm2 = sm1 & sayingUsed .~ phrasesUsedFromGameSavedData sm1sm2532,24160
+    sm3 = updatePlayerFile sm2sm3533,24223
+    newSM = if percentageUsed > 80 then sm3 else sm2newSM534,24254
+phraseIdToPhrase ss i =  (ss ^. (sayingStatic . sayingPhraseMap)) M.! iphraseIdToPhrase540,24461
+theseAnswers sm phraseId = M.elems $ fromMaybe M.empty $ M.lookup  phraseId aMaptheseAnswers543,24588
+updatePlayerFile = addAction WritePlayersupdatePlayerFile550,24832
+getGWS str smgetGWS559,25021
+    gws = sm ^. sayingGameWaitingStategws563,25137
+setGWS str newGWS smsetGWS566,25249
+    gws = sm ^. sayingGameWaitingStategws570,25414
+    newMutable = sm & sayingGameWaitingState .~ newGWSnewMutable571,25453
+haveAnswered mbPhId pId (AnswerMap am) = maybe Nothing result mbPhIdhaveAnswered574,25579
+    result phId = do -- in the Maybe Monadresult576,25656
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/STS/Pure/Voting.hs,2174
+module Games.STS.Pure.Voting (scoreThisPhrase) whereGames.STS.Pure.Voting7,170
+scoreThisPhrase phraseId pMap (AnswerMap aMap)scoreThisPhrase54,1522
+    newAmap = scores pMap (aMap ^. at  phraseId . _Just)newAmap59,1755
+scores pMap aMap = foldr (\a b -> score a pMap b ) aMap (M.keys aMap)scores62,1882
+score pId pMap aMapscore67,2039
+      combine srs = resultcombine79,2485
+          withValidReasons = filter reasonsThatAreNotNull srswithValidReasons81,2526
+          resultresult82,2588
+          go (x1:x2:xs) =go88,2849
+          reasonsThatAreNotNull sr = (not . null) (sr ^. srReasons)reasonsThatAreNotNull99,3438
+      accumulate rs =accumulate101,3563
+      withName i listOfText = ScoreReason pId myName (Score i)withName110,3909
+      myAns  = aMap ! pIdmyAns113,4045
+      me     = pMap ! pIdme115,4090
+      myName = me ^. playerNamemyName117,4137
+      nameOf p = (pMap ! p) ^. playerNamenameOf119,4202
+      reasonOthers = -- trc "reasonOthers" $reasonOthers121,4280
+          theReason x = withName 1theReason124,4390
+      reasonsForIWroteTheCorrectAnswer = -- trc "reasonsForIWroteTheCorrectAnswer" $reasonsForIWroteTheCorrectAnswer127,4554
+      reasonsForIVotedTheCorrectAnswer = -- trc "reasonsForIVotedTheCorrectAnswer" $reasonsForIVotedTheCorrectAnswer139,5096
+      reasonIVotedForMyself = -- trc ("reasonIVotedForMyself1") $reasonIVotedForMyself146,5413
+      reasonIDidNotVoteForMyself = reasonOthersreasonIDidNotVoteForMyself166,6560
+theyVotedForThemselves paMap pId =theyVotedForThemselves172,6750
+    theirPids (VotedFor pids) = pidstheirPids176,6885
+myVotes ans = ans ^. (answerVotes . votedByMe)myVotes180,7038
+theirVotes ans = ans ^. (answerVotes . votedForMe)theirVotes183,7121
+myPid ans = ans ^. answerPlayerIdmyPid186,7201
+iWroteTheCorrectAnswer ans = ans ^. answerIsCorrectiWroteTheCorrectAnswer189,7277
+iVotedForTheCorrectAnswer ans = VoteForCorrectAnswer == myVotes ansiVotedForTheCorrectAnswer192,7374
+iVotedForMyself ans = myPid ans `elem` theirVotes ansiVotedForMyself195,7477
+othersThatVotedForMe ans = filter (/= myPid ans) (theirVotes ans)othersThatVotedForMe198,7577
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/STS/Snaplet.hs,2413
+module Games.STS.SnapletGames.STS.Snaplet9,235
+data STSException = TestException deriving ShowSTSException51,1656
+data STSException = TestException deriving ShowTestException51,1656
+instance Exception STSExceptionException52,1704
+wrapping = Falsewrapping55,1754
+stsSnapletInit  = makeSnaplet "stsSnaplet"stsSnapletInit58,1830
+    sayingRoutes =   [sayingRoutes82,2890
+    watchRequest handler = getRequest >>= watchLine . show . requestDebug >>=watchRequest97,3616
+    requestDebug req = "STS Url: " <> rqURI reqrequestDebug100,3778
+lmsg = div_ [ hxSwapOob_ "innerhtml:#login-error"] $ "error message here"lmsg113,4120
+paramsAsText = M.map (map decodeUtf8) . rqParamsparamsAsText115,4195
+handlerLogin = dohandlerLogin118,4297
+    errorMessage = div_ [ hxSwapOob_ "innerhtml:#login-error"] errorMessage137,5013
+    proceed (Just p) (Just g) = undefined -- writeLazyText . renderText $proceed138,5077
+handlerChat = runWithSockethandlerChat145,5404
+      runWithSocket = runWebSocketsSnap (\pending ->runWithSocket147,5442
+      acceptConnection p = doacceptConnection149,5573
+      runWithConnection connection = handle runWithConnectionException $ dorunWithConnection152,5703
+      runWithConnectionException (e :: SomeException) =runWithConnectionException158,6004
+      closeConnection connection = docloseConnection160,6150
+runChat c = dorunChat165,6339
+chatMessage x = "<div hx-swap-oob=\"beforeend:#chat_room\">" <> x <> "</div>"chatMessage175,6575
+handlerHeartbeat = runWithSockethandlerHeartbeat178,6708
+      runWithSocket = runWebSocketsSnap (\pending ->runWithSocket180,6751
+      acceptConnection p = doacceptConnection182,6882
+      runWithConnection connection = handle runWithConnectionException $ dorunWithConnection185,7017
+      runWithConnectionException (e :: SomeException) =runWithConnectionException191,7328
+      closeConnection connection = docloseConnection194,7552
+runHeartbeat c = dorunHeartbeat199,7751
+heartMessage x = "<div id=\"idHeart\" hx-swap-oob=\"true\">" <> x <> "</div>"heartMessage206,7930
+handlerHtext = dohandlerHtext209,8059
+handlerSink = dohandlerSink219,8291
+handlerDump = dohandlerDump224,8417
+handlerWelcome =  render "/games/sts/welcome"handlerWelcome231,8628
+stsHandlerSocket = dostsHandlerSocket234,8729
+    stsHandlerSocketException (e :: SomeException) = dostsHandlerSocketException243,9074
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/STS/Types/Client.hs,942
+module Games.STS.Types.Client whereGames.STS.Types.Client8,247
+data C = C {C36,1204
+    _cDebug            :: Bool_cDebug37,1217
+  , _w                 :: W_w38,1248
+  , _cPhraseAnswer     :: Text_cPhraseAnswer39,1276
+  , _cPhraseReceived   :: Phrase_cPhraseReceived40,1307
+  , _cChoices          :: [(Int,Text)]_cChoices41,1340
+  , _cStatus           :: ([ActivityStatus], [ScoreBoard])_cStatus42,1379
+  , _cDetails          :: ([WhoSaid], [ScoreReason])_cDetails43,1438
+  , _cGameWaitingState :: GameWaitingState_cGameWaitingState44,1491
+  , _cMbAnswerGiven    :: Maybe Text_cMbAnswerGiven45,1534
+defaultC = C True defaultW "" defaultPhrase []  ([],[]) ([],[]) GameLoggingIn NothingdefaultC48,1621
+type CWorld = Ref CCWorld50,1708
+type UpdateC a = C -> a -> CUpdateC51,1728
+modifyW cw f = domodifyW54,1798
+modifyC cw f = domodifyC62,1930
+getWorld cw = dogetWorld68,2022
+showC txt cWorld = doshowC73,2104
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/STS/Types/Shared.hs,4631
+module Games.STS.Types.Shared whereGames.STS.Types.Shared9,199
+data PhraseId = PhraseId {PhraseId25,525
+  unPhraseId :: IntunPhraseId26,552
+data Phrase = Phrase PhraseId Text Text TextPhrase29,614
+defaultPhrase = Phrase (PhraseId 0) "No Category" "No prefix" "No suffix"defaultPhrase33,722
+phraseCorrectPart  (Phrase _ _ _ x) = xphraseCorrectPart38,916
+removeAnswer (Phrase i t1 t2 _) = Phrase i t1 t2 ""removeAnswer40,989
+phraseIdOf (Phrase i _ _ _) = i                                  phraseIdOf42,1074
+instance Default PhraseId whereDefault46,1154
+  def = PhraseId 0def47,1186
+instance Ord PhraseId whereOrd49,1206
+  compare (PhraseId x) (PhraseId y) = compare x ycompare50,1234
+instance Ord Phrase whereOrd52,1285
+  compare (Phrase i1 _ _ _) (Phrase i2 _ _ _) = compare i1 i2compare53,1311
+data Vote = NoVote | VoteForCorrectAnswer | VotedFor [PlayerId]NoVote56,1381
+data Vote = NoVote | VoteForCorrectAnswer | VotedFor [PlayerId]Vote56,1381
+data Vote = NoVote | VoteForCorrectAnswer | VotedFor [PlayerId]VoteForCorrectAnswer56,1381
+data Vote = NoVote | VoteForCorrectAnswer | VotedFor [PlayerId]VotedFor56,1381
+data Votes = Votes {Votes59,1484
+    _votedForMe :: [PlayerId]_votedForMe60,1505
+  , _votedByMe :: Vote }_votedByMe61,1535
+data Answer = Answer {Answer64,1599
+    _answerId          :: PhraseId_answerId65,1622
+  , _answerPlayerId    :: PlayerId_answerPlayerId66,1657
+  , _answerGiven       :: Text_answerGiven67,1692
+  , _answerIsCorrect   :: Bool_answerIsCorrect68,1723
+  , _answerPhrase      :: Phrase_answerPhrase69,1754
+  , _answerScoreReason :: ScoreReason_answerScoreReason70,1787
+  , _answerVotes       :: Votes }_answerVotes71,1825
+sampleScoreReason = ScoreReason (PlayerId 0) "" defaultScore []sampleScoreReason75,1933
+sampleVotes = Votes [PlayerId 1001, PlayerId 1002]sampleVotes78,2019
+samplePhrase = Phrase (PhraseId 1001) "Spanish" "As are the times," " so are the manners"samplePhrase81,2155
+sampleAnswer = Answer (PhraseId 1001) (PlayerId 1001)sampleAnswer83,2268
+sampleAnswerHenry = Answer (PhraseId 1001) (PlayerId 1001)sampleAnswerHenry88,2449
+sampleAnswerNadine = Answer (PhraseId 1001) (PlayerId 1002)sampleAnswerNadine93,2650
+data SayingCommand =SayingCommand97,2824
+    StartGameStartGame98,2845
+  | LetsGetGoing      PlayerIdLetsGetGoing99,2859
+  | HereWeGo          GameWaitingState PlayerActivity (Maybe Phrase) (Maybe Text)HereWeGo100,2890
+  | SendMeASayingSendMeASaying101,2972
+  | HereIsYourSaying  PhraseHereIsYourSaying102,2990
+  | ReceiveAnswer     PlayerId TextReceiveAnswer103,3019
+  | SendMeTheVotesSendMeTheVotes104,3055
+  | HereAreTheVotes   [(Int,Text)]HereAreTheVotes105,3074
+  | ReceiveVote       PlayerId IntReceiveVote106,3109
+  | StopGameStopGame107,3144
+  | ScoreDetails      [WhoSaid] [ScoreReason] PhraseScoreDetails108,3157
+  | SendStatus        ScoreStatusSendStatus109,3210
+  | RoundCompleteRoundComplete110,3244
+  | SocketClosed      PlayerIdSocketClosed111,3262
+  | Comment           TextComment112,3293
+getTimerValue (Just x) _ = if x == 0 then Nothing else Just xgetTimerValue122,3557
+instance CanFay SayingCommandCanFay128,3700
+instance Ord ScoreReason whereOrd130,3731
+  compare (ScoreReason _ t1 i1 _) (ScoreReason _ t2 i2 _) = compare (i1,t1) (i2,t2)compare131,3762
+instance Default ScoreBoard whereDefault133,3847
+  def = ScoreBoard "no name" defaultScore (PlayerId 0)def134,3881
+instance Default ScoreReason whereDefault136,3937
+  def = ScoreReason def "" def []def137,3972
+instance Default Vote whereDefault139,4007
+  def = NoVotedef140,4035
+instance Default Votes whereDefault142,4051
+  def = Votes [] defdef143,4080
+instance Default Answer whereDefault145,4102
+  def = Answer def def "No answer" False def def defdef146,4132
+instance Default Phrase whereDefault148,4186
+  def = defaultPhrasedef149,4216
+data DrawingCommand =DrawingCommand156,4293
+    DrawInitialDrawInitial157,4315
+  | DrawStartGameDrawStartGame158,4331
+  | DrawLoggedInOKDrawLoggedInOK159,4349
+  | DrawHereIsYourSaying PhraseDrawHereIsYourSaying160,4368
+  | DrawHereAreTheVotes  [(Int,Text)] BoolDrawHereAreTheVotes161,4400
+  | DrawStatus           [Text] [Text]DrawStatus162,4443
+  | DrawScoreBoard       [ScoreBoard]DrawScoreBoard163,4482
+  | DrawWhoSaids         [WhoSaid]DrawWhoSaids164,4520
+  | DrawScoreReasons     [ScoreReason]DrawScoreReasons165,4555
+  | DrawLoginStatus      [ActivityStatus]DrawLoginStatus166,4594
+  | DrawYourResponse     TextDrawYourResponse167,4636
+  | DrawError            TextDrawError168,4666
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/Types/Actions.hs,272
+module Games.Types.Actions whereGames.Types.Actions6,141
+data ActionCommand = ActionCommand12,266
+    Background       TextBackground13,288
+  | WritePlayersWritePlayers14,314
+  | ChangeBackgroundChangeBackground15,331
+instance CanFay ActionCommandCanFay19,402
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/Types/Commands.hs,1077
+module Games.Types.Commands whereGames.Types.Commands4,73
+type StarterId = PlayerIdStarterId11,267
+type WaiterId  = PlayerIdWaiterId12,293
+type StarterName = TextStarterName13,319
+type WaiterName  = TextWaiterName14,343
+data GamesCommand =GamesCommand17,369
+    Notify Text                              -- only to ClientNotify18,389
+  | GameOpen PlayerId SWTheGameName              -- only sent to ServerGameOpen19,452
+  | WaitingToStart StarterId PlayerNameTheGameName-- only sent to ClientWaitingToStart20,524
+  | AskingToJoin StarterId WaiterId WaiterName -- the waiter wants to playAskingToJoin21,597
+  | PlayerAccepted Bool StarterId WaiterId   -- sent to bothPlayerAccepted22,672
+  | GameClose GameNumberTheGameName              -- sent to bothGameClose23,733
+  | Test Text                                -- sent to bothTest24,798
+  | GamePlayers [PlayerName]                 -- only to ClientGamePlayers25,859
+  | Chat PlayerName  TextChat26,922
+data GamesAction =GamesAction29,993
+  ActionClose GameNumberTheGameNameActionClose30,1012
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/Types/Connection.hs,448
+module Games.Types.Connection whereGames.Types.Connection1,0
+data Conn = NoConnection |Conn9,187
+data Conn = NoConnection |NoConnection9,187
+            Connected {Connected10,214
+               connWS      :: WS.ConnectionconnWS11,238
+             , connWHandle :: HandleconnWHandle12,282
+             , connTVar    :: TVar [Text] }connTVar13,319
+instance Show Conn whereShow20,533
+  show NoConnection = "NoConnection"show21,558
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/Types/Exception.hs,1226
+module Games.Types.Exception whereGames.Types.Exception1,0
+data GamesException =  SendBroadCastExceptionGamesException5,69
+data GamesException =  SendBroadCastExceptionSendBroadCastException5,69
+                     | SomeTriviaTestExceptionSomeTriviaTestException6,115
+                     | UnexpectedCommand StringUnexpectedCommand7,162
+                     | TriviaReadyCommandException StringTriviaReadyCommandException8,210
+                     | TriviaRunCommandDie StringTriviaRunCommandDie9,268
+                     | BroadCastNothingReceiveConnectionExceptionBroadCastNothingReceiveConnectionException10,318
+                     | BroadCastNothingSendConnectionException StringBroadCastNothingSendConnectionException11,384
+                     | RuntimeReceivePidExceptionRuntimeReceivePidException12,454
+                     | OutOfMockDataExceptionOutOfMockDataException13,504
+                     | ActionLoginExpectedException StringActionLoginExpectedException14,550
+                     | PlayerIdShouldExistException StringPlayerIdShouldExistException15,609
+                     | UpdatePlayerExceptionUpdatePlayerException16,668
+instance Exception GamesExceptionException19,753
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/Types/Login.hs,2146
+module Games.Types.Login whereGames.Types.Login6,141
+type Cookie = TextCookie18,419
+data GameId = GameId { unGameId :: Text }GameId20,439
+data GameId = GameId { unGameId :: Text }unGameId20,439
+data GameEntry = NoGameIdGiven | GameIdGiven GameId | GameIdSuggested GameIdGameEntry23,522
+data GameEntry = NoGameIdGiven | GameIdGiven GameId | GameIdSuggested GameIdGameIdGiven23,522
+data GameEntry = NoGameIdGiven | GameIdGiven GameId | GameIdSuggested GameIdGameIdSuggested23,522
+data GameEntry = NoGameIdGiven | GameIdGiven GameId | GameIdSuggested GameIdNoGameIdGiven23,522
+data LoginCommand =LoginCommand26,638
+    Dump             TextDump27,658
+  | Login            Text {-playerName-} Gender Text {-playerEmail-} Team SWLogin28,684
+  | NewGame          GameEntry CookieNewGame29,761
+  | MatchingPlayers  [(PlayerId, Text)]MatchingPlayers30,799
+  | SelectedPlayer   (Maybe PlayerId)SelectedPlayer31,839
+  | LoginBad         TextLoginBad32,877
+  | LoginStatus      [ActivityStatus]LoginStatus33,903
+  | LoginOK          GameId PlayerId PlayerName Gender PlayerActivity Bool {-HaveCookie-}LoginOK34,941
+data GameWaitingState =GameWaitingState37,1069
+    GameLoggingInGameLoggingIn38,1093
+  | GameWaitingForAnswersGameWaitingForAnswers39,1111
+  | GameWaitingForVotesGameWaitingForVotes40,1137
+instance CanFay LoginCommandCanFay45,1228
+instance Default GameId whereDefault47,1258
+  def = GameId ""def48,1288
+instance Ord GameId whereOrd50,1307
+  compare g1 g2 = compare (unGameId g1) (unGameId g2)compare51,1333
+data BroadCastReceiver = BroadCastToEveryone        |BroadCastReceiver53,1388
+data BroadCastReceiver = BroadCastToEveryone        |BroadCastToEveryone53,1388
+                         BroadCastToSome [Sink]     |BroadCastToSome54,1442
+                         BroadCastToPids [PlayerId] |BroadCastToPids55,1496
+                         BroadCastToEveryoneElse [PlayerId]BroadCastToEveryoneElse56,1550
+data BroadCast a = BroadCast {BroadCast59,1648
+    _broadCastTo       :: BroadCastReceiver_broadCastTo60,1679
+  , _broadCastCommands :: [a] }_broadCastCommands61,1723
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/Types/NiceShow.hs,4730
+module Games.Types.NiceShow  (niceGameCommand, NiceShow(..)) whereGames.Types.NiceShow9,210
+niceInt                = pack . show niceInt53,1681
+niceIntList            = unwords . map (pack . show)niceIntList55,1759
+niceBool b             = pack (if b then "true" else "false")niceBool57,1851
+niceText               = idniceText59,1952
+niceTextList l         = "[" <> Data.Text.intercalate "," l <> "]"niceTextList61,2021
+pStrLn               = Prelude.putStrLn . unpackpStrLn64,2127
+class NiceShow a whereNiceShow66,2177
+instance NiceShow LoginCommand whereNiceShow69,2225
+  niceShow = niceLoginCommandniceShow70,2262
+instance NiceShow SayingCommand whereNiceShow72,2293
+  niceShow = niceSayingCommandniceShow73,2331
+instance NiceShow ActionCommand whereNiceShow75,2363
+  niceShow = niceActionCommandniceShow76,2401
+instance NiceShow GameCommand whereNiceShow78,2433
+  niceShow = niceGameCommandniceShow79,2469
+stripPrefix a b = if Data.Text.isPrefixOf a b then Just (Data.Text.drop (Data.Text.length a) b) else NothingstripPrefix84,2549
+ts = pack . showts87,2685
+niceGameEntry NoGameIdGiven                = "NoGameIdGiven "niceGameEntry90,2738
+niceActivityStatus (WhoAnswered texts) = "WhoAnswered "  <> niceTextList textsniceActivityStatus95,2990
+    en (pa,texts) = showPlayerActivity pa <> "," <> niceTextList textsen99,3221
+niceLoginCommand (Dump txt) = "Dump " <> ts txtniceLoginCommand102,3334
+    en (PlayerId x, txt) = niceInt x <> "," <> niceText txten110,3700
+sampleActivityStatus = WhatActivity (PlayerIsActive,["Henry", "Nadine", "Mike", "Barbara"])sampleActivityStatus120,4357
+sampleLogin1 = Login "Henry Laxen" Male "nadine.and.henry@pobox.com" NoTeam StartersampleLogin1124,4574
+sampleLogin2 = NewGame  (GameIdGiven (GameId "x")) "cookie"sampleLogin2125,4658
+sampleLogin3 = MatchingPlayers [(PlayerId 1,"one"), (PlayerId 2,"two")]sampleLogin3126,4718
+sampleLogin4 = SelectedPlayer (Just (PlayerId 1))sampleLogin4127,4790
+sampleLogin5 = LoginBad "message"sampleLogin5128,4840
+sampleLogin6 = LoginOK (GameId "a") (PlayerId 1) "Henry Laxen" Male PlayerIsActive TruesampleLogin6129,4874
+sampleLogin7 = LoginStatus [sampleActivityStatus,sampleActivityStatus]sampleLogin7130,4962
+sampleLoginCommands = sampleLoginCommands133,5072
+testLogin = dotestLogin136,5209
+nicePhrase (Phrase (PhraseId phId) t1 t2 t3) = unwordsnicePhrase140,5314
+samplePhrase1 = Phrase (PhraseId 1) "first" "second" "third"samplePhrase1144,5448
+niceVote NoVote = "NoVote"niceVote147,5535
+sampleVote = VotedFor [PlayerId 1, PlayerId 2]sampleVote153,5735
+niceScoreReason (ScoreReason (PlayerId pId) pName (Score score) textList) = unwordsniceScoreReason156,5822
+niceWhoSaid (WhoSaid pName txt) = unwordsniceWhoSaid161,6037
+sampleWhoSaid =  WhoSaid "Henry Laxen" "Said Something"sampleWhoSaid165,6149
+niceScoreBoard (ScoreBoard pName (Score score) _ ) = unwordsniceScoreBoard168,6243
+sampleScoreBoard = ScoreBoard "Henry Laxen" (Score 1) (PlayerId 1)sampleScoreBoard172,6384
+niceScoreStatus (ScoreStatus activityList scoreBoardList) = unwordsniceScoreStatus175,6491
+sampleScoreStatus  = ScoreStatus [sampleActivityStatus, sampleActivityStatus]sampleScoreStatus181,6734
+textSayingMap = [textSayingMap185,6923
+niceSayingFromMap scmd = lookup scmd textSayingMapniceSayingFromMap193,7167
+niceSayingCommand scmd = fromMaybe (niceSayingCommandWithArgs scmd) (niceSayingFromMap scmd)niceSayingCommand196,7262
+niceSayingCommandWithArgs (LetsGetGoing (PlayerId x)) = unwordsniceSayingCommandWithArgs199,7407
+sampleSayingCommand1 = HereWeGo GameLoggingIn PlayerIsActive Nothing (Just "Some Text Here")sampleSayingCommand1228,9012
+sampleSayingCommand2 = HereIsYourSaying (Phrase (PhraseId 1) "text1" "text2" "text3")sampleSayingCommand2229,9105
+sampleSayingCommand3 = ReceiveAnswer (PlayerId 1) "The answer received"sampleSayingCommand3230,9191
+sampleSayingCommand4 = HereAreTheVotes [(1,"a"), (2,"b"), (3,"c")]sampleSayingCommand4231,9263
+sampleSayingCommand5 = ReceiveVote (PlayerId 1) 2sampleSayingCommand5232,9330
+sampleSayingCommand6 = ScoreDetails [sampleWhoSaid, sampleWhoSaid, sampleWhoSaid]sampleSayingCommand6233,9380
+sampleSayingCommand7 = SendStatus sampleScoreStatussampleSayingCommand7236,9586
+sampleSayingCommand8 = RoundCompletesampleSayingCommand8237,9638
+sampleSayingCommands =sampleSayingCommands240,9716
+testSayings = dotestSayings245,9941
+niceActionCommand (Background _) = "Background"niceActionCommand249,10060
+niceGameCommand (LoginCommand  cmd) = niceLoginCommand cmdniceGameCommand254,10251
+sampleGameCommands =sampleGameCommands259,10467
+test = mapM_ (pStrLn . niceGameCommand) sampleGameCommandstest264,10587
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/Types/Player.hs,4042
+module Games.Types.Player whereGames.Types.Player7,181
+data Player = PlayerPlayer32,720
+  {   _playerName              :: !PlayerName -- what the user typed in_playerName33,741
+    , _playerId                :: !PlayerId -- is globally unique_playerId34,813
+    , _playerGender            :: !Gender_playerGender35,879
+    , _playerSW                :: !SW -- Starter or Waiter_playerSW36,921
+    , _playerCreated           :: !UTCTime_playerCreated37,980
+    , _playerEmail             :: !Text_playerEmail38,1023
+    , _playerTeam              :: !Team_playerTeam39,1063
+    , _playerScore             :: !Score_playerScore40,1103
+    , _playerWantsNotification :: !Bool_playerWantsNotification41,1144
+    , _playerHasLoggedIn       :: !Bool_playerHasLoggedIn42,1184
+    , _playerSavedData         :: Map TheGameName GamesSavedData_playerSavedData43,1224
+    , _playerPhoto             :: !Photo_playerPhoto44,1289
+    , _playerRoom              :: !Room_playerRoom45,1330
+    , _playerActivity          :: !PlayerActivity -- PlayerIsActive or PlayerIsGone_playerActivity46,1370
+    , _playerPrettyName        :: !PlayerName -- what we show him and others_playerPrettyName47,1454
+type PlayerMap    = Map PlayerId PlayerPlayerMap57,1625
+newtype SinkMap   = SinkMap {SinkMap58,1665
+  unSinkMap :: Map PlayerId SinkunSinkMap59,1695
+quickShow p = Prelude.unwords   [quickShow64,1799
+newtype NameToPidMap = NameToPidMap {NameToPidMap70,2090
+  unNameToPidMap :: Map PlayerNameTidied [PlayerId]unNameToPidMap71,2128
+instance Default NameToPidMap whereDefault74,2221
+  def = NameToPidMap Data.Map.Strict.emptydef75,2257
+type PlayerIdMap = Map PlayerId PlayerPlayerIdMap77,2301
+instance Ord Player whereOrd79,2341
+  compare p1 p2 = compare (_playerId p1) (_playerId p2)compare80,2367
+newtype GameNumberMap a = GameNumberMap {GameNumberMap82,2424
+  unGameNumberMap :: Map GameNumber (TVar a) }unGameNumberMap83,2466
+instance Show a => Show (GameNumberMap a) whereShow85,2514
+  show (GameNumberMap x) =show86,2562
+instance Default Team whereDefault94,2795
+  def = NoTeamdef95,2823
+instance Default TheGameName whereDefault96,2838
+  def = NoGamedef97,2873
+instance Default GameNumber whereDefault98,2888
+  def = GameNumber 0def99,2922
+instance Default SW whereDefault100,2943
+  def = Waiterdef101,2969
+instance Default Gender whereDefault102,2984
+  def = NoGenderdef103,3014
+instance Default Room whereDefault104,3031
+  def = Room 0def105,3059
+instance Default PlayerActivity whereDefault106,3074
+  def = PlayerIsLoggingIndef107,3112
+instance Default Player whereDefault108,3138
+  def = Playerdef109,3168
+playerIdToPlayerName pMap pId = pMap ^. at pId . _Just . playerNameplayerIdToPlayerName128,3868
+sampleGamesSavedData = GamesSavedData defaultUTCTime GameSoTheySay ["Mike", "Barbara", "Nadine", "Henry"] "1 2 3"sampleGamesSavedData131,3976
+sampleNameToPidMap = fromListsampleNameToPidMap134,4145
+gameNameMap = fromListgameNameMap138,4301
+sampleStatus = [sampleStatus149,4622
+samplePlayerHenry             = PlayersamplePlayerHenry157,4874
+samplePlayerNadine            = PlayersamplePlayerNadine176,5604
+samplePlayerMike              = PlayersamplePlayerMike195,6337
+samplePlayerBarara            = PlayersamplePlayerBarara214,7068
+samplePlayerMap = fromList [ (PlayerId 1001, samplePlayerHenry)samplePlayerMap233,7808
+ifThenElse b a1 a2 = if b then a1 else a2ifThenElse240,8129
+he p = case _playerGender p ofhe244,8214
+him p = case _playerGender p ofhim250,8318
+himself p = case _playerGender p ofhimself256,8424
+textGenderMap = [textGenderMap263,8579
+textTeamMap = [textTeamMap270,8734
+textSWMap = [textSWMap278,8906
+textPAMap = [textPAMap283,9009
+readPlayerActivity x = rpreadPlayerActivity290,9246
+showPlayerActivity x = showLookup ("No such PlayerActivity for show ") textPAMap xshowPlayerActivity295,9404
+readGender x = rgreadGender298,9517
+readTeam x = rtreadTeam303,9643
+readSW x = rsreadSW308,9761
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/Types/Primitives.hs,3508
+module Games.Types.Primitives whereGames.Types.Primitives11,293
+defaultUTCTime = read ("2014-08-05 01:58:35.863879 UTC" :: String)defaultUTCTime29,664
+data TheGameName = GameLocutioGameLocutio32,739
+data TheGameName = GameLocutioTheGameName32,739
+                 | GameSoTheySayGameSoTheySay33,770
+                 | GameTriviaGameTrivia34,803
+                 | GameGettingToKnowYouGameGettingToKnowYou35,833
+                 | NoGameNoGame36,873
+prettyGamesMap = [prettyGamesMap40,983
+data Photo = NoPhoto | Photo { unPhoto :: Text }NoPhoto50,1184
+data Photo = NoPhoto | Photo { unPhoto :: Text }Photo50,1184
+data Photo = NoPhoto | Photo { unPhoto :: Text }unPhoto50,1184
+data Gender    = NoGender | Male | Female | NeutralFemale52,1271
+data Gender    = NoGender | Male | Female | NeutralGender52,1271
+data Gender    = NoGender | Male | Female | NeutralMale52,1271
+data Gender    = NoGender | Male | Female | NeutralNeutral52,1271
+data Gender    = NoGender | Male | Female | NeutralNoGender52,1271
+data SW = Starter | WaiterSW54,1361
+data SW = Starter | WaiterStarter54,1361
+data SW = Starter | WaiterWaiter54,1361
+data GameNumber = GameNumber {unGameNumber :: Int }GameNumber56,1426
+data GameNumber = GameNumber {unGameNumber :: Int }unGameNumber56,1426
+data PlayerId = PlayerId { unPlayerId :: Int }PlayerId58,1516
+data PlayerId = PlayerId { unPlayerId :: Int }unPlayerId58,1516
+data Category   = Category TextCategory60,1601
+data Team = NoTeam | Red | Blue | Green | YellowBlue62,1671
+data Team = NoTeam | Red | Blue | Green | YellowGreen62,1671
+data Team = NoTeam | Red | Blue | Green | YellowNoTeam62,1671
+data Team = NoTeam | Red | Blue | Green | YellowRed62,1671
+data Team = NoTeam | Red | Blue | Green | YellowTeam62,1671
+data Team = NoTeam | Red | Blue | Green | YellowYellow62,1671
+data Room     = Room { unRoom :: Int }Room64,1758
+data Room     = Room { unRoom :: Int }unRoom64,1758
+type PlayerName = TextPlayerName67,1836
+type PlayerNameTidied = TextPlayerNameTidied68,1859
+validTeams = [Red,Blue,Green,Yellow]validTeams71,1910
+data GamesSavedData = GamesSavedDataGamesSavedData73,1948
+  {    _gamesSavedLastTimePlayed    :: UTCTime_gamesSavedLastTimePlayed74,1985
+     , _gamesSavedLastGamePlayed    :: TheGameName_gamesSavedLastGamePlayed75,2032
+     , _gamesSavedLastPlayedWith    :: [PlayerName]_gamesSavedLastPlayedWith76,2083
+     , _gamesSavedInfo              :: Text -- Varies_gamesSavedInfo77,2135
+data PlayerActivity =PlayerActivity81,2234
+    PlayerIsLoggingInPlayerIsLoggingIn82,2256
+  | PlayerIsActivePlayerIsActive83,2278
+  | PlayerIsGonePlayerIsGone84,2297
+  | PlayerWantsBackPlayerWantsBack85,2314
+data ActivityStatus =ActivityStatus88,2375
+    WhoAnswered [Text]WhoAnswered89,2397
+  | WhoVoted [Text]WhoVoted90,2420
+  | WhatActivity (PlayerActivity, [Text])WhatActivity91,2440
+unpackActive aList = go ([],[],[],[]) aListunpackActive96,2640
+ go (a,b,c,d) [] = (Prelude.concat a, Prelude.concat b, Prelude.concat c, Prelude.concat d)go98,2692
+whoAnswered status = Prelude.concat [ x | WhoAnswered x <- status ]whoAnswered105,3080
+whoVoted status = Prelude.concat [ x | WhoVoted x <- status ]whoVoted108,3188
+whoLoggedIn status = unpackActive [ x | WhatActivity x <- status ]whoLoggedIn111,3316
+instance Default  GamesSavedData whereDefault114,3396
+  def = GamesSavedDatadef115,3435
+instance Default PlayerId whereDefault121,3650
+  def = PlayerId 0def122,3682
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/Types/Score.hs,1354
+module Games.Types.Score whereGames.Types.Score10,253
+data Score     = Score { unScore :: Int }Score22,478
+data Score     = Score { unScore :: Int }unScore22,478
+data ScoreReason = ScoreReason {ScoreReason25,565
+    _srPlayerId   :: PlayerId_srPlayerId26,598
+  , _srPlayerName :: PlayerName_srPlayerName27,628
+  , _srScore      :: Score_srScore28,660
+  , _srReasons    :: [Text] }_srReasons29,687
+data ScoreBoard = ScoreBoard PlayerName Score PlayerId {- Name Score PlayerId -}ScoreBoard32,756
+data WhoSaid = WhoSaid PlayerName TextWhoSaid35,876
+defaultScore = Score 0           defaultScore39,976
+data ScoreStatus =  ScoreStatus [ActivityStatus] [ScoreBoard] ScoreStatus41,1011
+instance Ord Score whereOrd47,1151
+  compare (Score a) (Score b) = compare a bcompare48,1176
+instance Default Score whereDefault50,1221
+  def = Score 0def51,1250
+instance Num Score whereNum53,1267
+  Score a + Score b = Score (a+b)+54,1292
+  Score a - Score b = Score (a-b)-55,1326
+  Score a * Score b = Score (a*b)*56,1360
+  signum (Score _)  = 1signum57,1394
+  fromInteger a = Score (fromInteger a)fromInteger58,1418
+  abs (Score a) = Score (abs a)abs59,1458
+  negate (Score a) = Score (negate a)negate60,1490
+sortByScore = sortOn (unScore . theScore)sortByScore63,1573
+    theScore (ScoreBoard _ x _ ) = xtheScore65,1623
+
+/home/henry/nadineloveshenry/projects/nlh/src/Games/Types/Top.hs,636
+module Games.Types.Top (GameCommand(..),Promote(..), module X)Games.Types.Top5,109
+data GameCommand =GameCommand14,326
+      LoginCommand  LoginCommandLoginCommand15,345
+    | ActionCommand ActionCommandActionCommand16,378
+    | STSCommand    SayingCommandSTSCommand17,412
+instance CanFay GameCommandCanFay21,501
+class Promote a wherePromote23,530
+instance Promote SayingCommand wherePromote26,583
+  promote = STSCommandpromote27,620
+instance Promote LoginCommand wherePromote29,644
+  promote = LoginCommandpromote30,680
+instance Promote ActionCommand wherePromote32,706
+  promote = ActionCommandpromote33,743
+
+/home/henry/nadineloveshenry/projects/shared/src/Fay/ClientLogin.hs,821
+module Fay.ClientLogin whereFay.ClientLogin6,169
+sendCommand s cmd = dosendCommand29,913
+jsSelectPlayer s e = dojsSelectPlayer37,1094
+jsClientLogin s _ = dojsClientLogin47,1436
+handleLoginCommand (Dump message) w socket = dohandleLoginCommand65,2246
+parseWelcome qs =parseWelcome160,5886
+    splitOnSlash = T.splitOn "/"splitOnSlash170,6153
+    tooShort x = Prelude.length (splitOnSlash x) < 4tooShort171,6186
+    noInfo = (NoGameIdGiven, False)noInfo172,6239
+    gameId x = GameId ((removeWelcome x) !! 1)gameId173,6275
+    removeWelcome = Prelude.take 2 . Prelude.drop 4 . splitOnSlashremoveWelcome174,6322
+    webrtcFlag x = ((removeWelcome x) !! 0) /= "0"webrtcFlag175,6389
+setHeading personName gameName teamName = dosetHeading179,6487
+drawLoginStatus  status = dodrawLoginStatus197,7204
+
+/home/henry/nadineloveshenry/projects/shared/src/Fay/Common.hs,1097
+ module Fay.Common (Fay.Common29,896
+unwords = Data.Text.unwordsunwords81,2019
+decimal x = dollars <> period <> centsdecimal86,2082
+    dollars = pack . show $ dollars1dollars89,2195
+    cents = padWith '0' 2 cents1cents90,2232
+period = "."period93,2281
+padWith c n i =padWith96,2341
+replaceInList (x:xs) i zreplaceInList109,2751
+nearIndices n = n : Prelude.concat [[n+i,n-i] | i <- [1..n]]nearIndices115,2903
+findSpaceNear int str =findSpaceNear118,3009
+breakAroundLength acc int str =breakAroundLength126,3324
+rJustWith len c n =rJustWith137,3601
+smallNumbers = [smallNumbers145,3757
+reverseMap = Prelude.map (\(a,b) -> (b,a))reverseMap151,3968
+readLookup msg l x = maybe (Left msg) Right $ lookup x lreadLookup154,4093
+showLookup msg l x = fromMaybe (error . unpack $  msg) $ lookup x (reverseMap l)showLookup157,4199
+formatNames verb x y =formatNames160,4339
+hasVerb names = if length names > 1 then "have" else "has"hasVerb166,4469
+wantVerb names = if length names > 1 then "want" else "wants"wantVerb169,4553
+englishList listOfTextenglishList172,4646

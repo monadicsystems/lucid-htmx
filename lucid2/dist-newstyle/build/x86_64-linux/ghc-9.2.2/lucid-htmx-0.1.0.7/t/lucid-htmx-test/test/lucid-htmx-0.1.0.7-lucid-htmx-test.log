@@ -1,0 +1,12 @@
+Test suite lucid-htmx-test: RUNNING...
+
+attributes
+  boost [✔]
+  get [✔]
+standalone
+  disable [✔]
+
+Finished in 0.0008 seconds
+3 examples, 0 failures
+Test suite lucid-htmx-test: PASS
+Test suite logged to: /home/henry/shared/haskell/lucid-htmx/lucid2/dist-newstyle/build/x86_64-linux/ghc-9.2.2/lucid-htmx-0.1.0.7/t/lucid-htmx-test/test/lucid-htmx-0.1.0.7-lucid-htmx-test.log
