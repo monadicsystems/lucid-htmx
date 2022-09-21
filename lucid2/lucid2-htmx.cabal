@@ -4,13 +4,13 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 
-name:           lucid-htmx
-version:        0.1.0.7
+name:           lucid2-htmx
+version:        0.1.0.8
 synopsis:       Use htmx in your lucid templates
-description:    Please see the README on GitHub at <https://github.com/MonadicSystems/lucid-htmx#readme>
+description:    Please see the README on GitHub at <https://github.com/monadicsystems/lucid-htmx/tree/main/lucid2#readme>
 category:       Web, HTML
-homepage:       https://github.com/MonadicSystems/lucid-htmx#readme
-bug-reports:    https://github.com/MonadicSystems/lucid-htmx/issues
+homepage:       https://github.com/monadicsystems/lucid-htmx/tree/main/lucid2#readme
+bug-reports:    https://github.com/monadicsystems/lucid-htmx/issues
 author:         Monadic Systems LLC
 maintainer:     tech@monadic.systems
 copyright:      2022 Monadic Systems LLC
@@ -23,13 +23,13 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/MonadicSystems/lucid-htmx
+  location: https://github.com/monadicsystems/lucid-htmx
 
 library
   exposed-modules:
       Lucid.Htmx
   other-modules:
-      Paths_lucid_htmx
+      Paths_lucid2_htmx
   hs-source-dirs:
       src
   build-depends:
@@ -40,11 +40,11 @@ library
     OverloadedStrings
   default-language: Haskell2010
 
-test-suite lucid-htmx-test
+test-suite lucid2-htmx-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Paths_lucid_htmx
+      Paths_lucid2_htmx
   hs-source-dirs:
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N 
@@ -55,6 +55,6 @@ test-suite lucid-htmx-test
     , HUnit
     , hspec
     , lucid2 <= 0.0.20220526
-    , lucid-htmx <= 0.1.0.7
+    , lucid2-htmx <= 0.1.0.8
     , text
   default-language: Haskell2010

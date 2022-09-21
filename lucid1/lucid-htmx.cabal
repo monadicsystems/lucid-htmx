@@ -5,9 +5,9 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           lucid-htmx
-version:        0.1.0.6
+version:        0.1.0.7
 synopsis:       Use htmx in your lucid templates
-description:    Please see the README on GitHub at <https://github.com/MonadicSystems/lucid-htmx#readme>
+description:    Please see the README on GitHub at <https://github.com/monadicsystems/lucid-htmx#readme>
 category:       Web, HTML
 homepage:       https://github.com/MonadicSystems/lucid-htmx#readme
 bug-reports:    https://github.com/MonadicSystems/lucid-htmx/issues

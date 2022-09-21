@@ -8,3 +8,6 @@ First release of `lucid-htmx`!
 
 Relax upper bound of `lucid` dependency up to, and including, 2.11
 
+## 0.1.0.7
+
+
