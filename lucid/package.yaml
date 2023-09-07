@@ -1,6 +1,6 @@
 name:                lucid-htmx
-version:             0.1.0.6
-github:              "MonadicSystems/lucid-htmx"
+version:             0.1.0.7
+github:              "monadicsystems/lucid-htmx"
 license:             BSD3
 author:              "Monadic Systems LLC"
 maintainer:          "tech@monadic.systems"
@@ -17,11 +17,11 @@ category:            Web, HTML
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/MonadicSystems/lucid-htmx#readme>
+description:         Please see the README on GitHub at <https://github.com/monadicsystems/lucid-htmx#readme>
 
 dependencies:
 - base >= 4.7 && < 5
-- lucid >= 2.9.12.1 && <= 2.11
+- lucid >= 2.9.12.1 && <= 2.11.20230408
 - servant
 - text
 
