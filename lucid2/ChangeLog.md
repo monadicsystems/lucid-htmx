@@ -17,3 +17,7 @@ Converted lucid1 version of lucid-htmx to lucid2 version
 ## 0.1.0.8
 
 Change name of package from lucid-htmx to lucid2-htmx to avoid name collision on hackage
+
+## 0.1.0.9
+
+Relax upper bound of `lucid2` dependency up to, and including, 0.0.20250303
